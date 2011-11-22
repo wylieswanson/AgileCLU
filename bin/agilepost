@@ -14,29 +14,36 @@
 
 from AgileCLU import AgileCLU
 from optparse import OptionParser, OptionGroup
-from urlparse import urlparse
-import sys, os.path, urllib
+import sys, os.path, urllib, subprocess, time
 
 def main():
 
 	# parse command line and associated helper
 
-	parser = OptionParser( usage= "usage: %prog [options] url path", version="%prog 1.0")
+	parser = OptionParser( usage= "usage: %prog [options] object path", version="%prog 1.0")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="be verbose", default=False)
         parser.add_option("-l", "--login", dest="username", help="use alternate account configuration")
 
 	group = OptionGroup(parser, "Handling Options")
 	group.add_option("-r", "--rename", dest="filename", help="rename destination file")
 	group.add_option("-m", "--mkdir", action="store_true", help="create destination path, if it does not exist")
+	group.add_option("-p", "--progress", action="store_true", help="show transfer progress bar")
 	parser.add_option_group(group)
 
 	(options, args) = parser.parse_args()
 	if len(args) != 2: parser.error("Wrong number of arguments. Exiting.")
-	url = args[0]
+	object = args[0]
 	path = args[1]
+	
+	if (not os.path.isfile(object)):
+		print "Local file object (%s) does not exist. Exiting." % localfile
+		sys.exit(1)
 
 	if options.username: agile = AgileCLU( options.username )
 	else: agile = AgileCLU()
+
+	localpath = os.path.dirname(object)
+	localfile = os.path.basename(object)
 
 	# check that destination path exists
 	if (not agile.exists(path)):
@@ -53,11 +60,14 @@ def main():
 			agile.logout()
 			sys.exit(1)
 	
-	o = urlparse( url )
 	if options.filename: fname = options.filename
-	else: fname = urllib.unquote( os.path.basename( o.path ) )
+	else: fname = localfile
+	
+	if options.progress:
+		subprocess.Popen( ['/usr/bin/curl', '--insecure', '-#', '-H', 'X-LLNW-Authorization: '+agile.tokenstr(), '-F', 'uploadFile=@'+object, '-F', 'directory='+path, '-F', 'basename='+fname, agile.posturlstr() ], stdout=subprocess.PIPE ).communicate()[0]
+	else:
+		subprocess.call( ['/usr/bin/curl', '--insecure', '-s', '-H', 'X-LLNW-Authorization: '+agile.tokenstr(), '-F', 'uploadFile=@'+object, '-F', 'directory='+path, '-F', 'basename='+fname, agile.posturlstr() ] )
 
-	r = agile.fetchFileHTTP( os.path.join(path,fname), url )
 	if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
 
         agile.logout()

@@ -59,8 +59,11 @@ class	AgileCLU:
 	def	mapperurlstr(self):
 		return self.mapperurl
 
-	def	cacheurlstr(Self):
+	def	cacheurlstr(self):
 		return self.cacheurl
+
+	def	tokenstr(self):
+		return self.token
 
 	def	stat(self, path):
 		r = self.api.stat( self.token, path )
