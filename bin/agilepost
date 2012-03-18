@@ -1,4 +1,4 @@
-#!/usr/bin/env python
+#!/usr/bin/python
 # coding: utf-8
 #
 # Copyright (C) 2010-2012, Wylie Swanson
@@ -45,7 +45,7 @@ def main():
 
 	group = OptionGroup(parser, "Handling Options")
 	group.add_option("-r", "--rename", dest="filename", help="rename destination file")
-	group.add_option("-c", "--mime", dest="mime", help="set MIME content-type")
+	group.add_option("-c", "--mimetype", dest="mimetype", help="set MIME content-type")
 	group.add_option("-t", "--time", dest="mtime", help="set optional mtime")
 	group.add_option("-e", "--egress", dest="egress", help="set egress policy (PARTIAL, COMPLETE or POLICY)")
 	group.add_option("-m", "--mkdir", action="store_true", help="create destination path, if it does not exist")
@@ -87,12 +87,29 @@ def main():
 
 	register_openers()
 
-	if options.progress: datagen, headers = multipart_encode({ "uploadFile": open(object, "rb"), "directory": path, "basename": fname, "expose_egress": "COMPLETE"}, cb=progress_callback)
-	else: datagen, headers = multipart_encode({ "uploadFile": open(object, "rb"), "directory": path, "basename": fname, "expose_egress": "COMPLETE"})
+	# video/mpeg for m2ts
+	if options.progress: 
+		datagen, headers = multipart_encode( { 
+			"uploadFile": open(object, "rb"), 
+			"directory": path, 
+			"basename": fname, 
+			"expose_egress": "COMPLETE"
+			}, cb=progress_callback)
+	else: 
+		datagen, headers = multipart_encode( { 
+			"uploadFile": open(object, "rb"), 
+			"directory": path, 
+			"basename": fname, 
+			"expose_egress": "COMPLETE"
+			} )
 
 	request = Request(agile.posturl, datagen, headers)
 	request.add_header("X-LLNW-Authorization", agile.token)
-	request.add_header("X-Content-Type", "auto")
+
+	if options.mimetype: mimetype = options.mimetype
+	else: mimetype = 'auto'
+
+	request.add_header("X-Content-Type", mimetype )
 
 	try: result = urlopen(request).read() 
 	except HTTPError, e: print '[!] HTTP Error: ', e.code
