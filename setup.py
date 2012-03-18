@@ -8,6 +8,8 @@ setup(  name="AgileCLU",
 	author="Wylie Swanson",
 	author_email="wylie@pingzero.net",
 	url="http://www.pingzero.net",
+	package_dir={'': 'src'},
+	packages=[''],
 	scripts=glob("bin/*"),
 	data_files=[
 		( '/etc/agile/', glob('agile/*') ),
