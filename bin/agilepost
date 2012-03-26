@@ -36,7 +36,7 @@ def progress_callback(param, current, total):
 
 def main():
 
-	global fname
+	global fname, pbar
 	# parse command line and associated helper
 
 	parser = OptionParser( usage= "usage: %prog [options] object path", version="%prog 1.0")
@@ -111,11 +111,24 @@ def main():
 
 	request.add_header("X-Content-Type", mimetype )
 
-	try: result = urlopen(request).read() 
-	except HTTPError, e: print '[!] HTTP Error: ', e.code
-	except URLError, e: print '[!] URL Error: ', e.reason
+	success = False ; attempt = 0
+	while not success:
+		attempt += 1
+		try: 
+			result = urlopen(request).read() 
+			if options.progress: pbar.finish()
+			success = True
+		except HTTPError, e: 
+			if options.progress: pbar.finish()
+			print '[!] HTTP Error: ', e.code
+			pbar = None
+			success = False
+		except URLError, e: 
+			if options.progress: pbar.finish()
+			print '[!] URL Error: ', e.reason
+			pbar = None
+			success = False
 
-	if options.progress: pbar.finish()
 	
 	if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
 
