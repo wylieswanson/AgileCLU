@@ -90,13 +90,13 @@ class	AgileCLU:
 		logger.info( self.uid+" "+self.token+", noop = "+str(r) )
 		return r
 
-	def	listDir(self, path, pageSize=10000, cookie=1, stat=True ):
+	def	listDir(self, path, pageSize=10000, cookie=0, stat=True ):
 		r = self.api.listDir( self.token, path, pageSize, cookie, stat )
 		logger.info( self.uid+" "+self.token+", listDir "+path+" pageSize "+str(pageSize)+" cookie "+str(cookie)+" stat "+str(stat) )
 		# +" = "+str(r) )
 		return r
 
-	def	listFile(self, path, pageSize=10000, cookie=1, stat=True ):
+	def	listFile(self, path, pageSize=10000, cookie=0, stat=True ):
 		r = self.api.listFile( self.token, path, pageSize, cookie, stat )
 		logger.info( self.uid+" "+self.token+", listFile "+path+" pageSize "+str(pageSize)+" cookie "+str(cookie)+" stat "+str(stat) )
 		# +" = "+str(r) )
