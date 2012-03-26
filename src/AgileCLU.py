@@ -14,9 +14,9 @@
 # GNU General Public License for more details.
 
 from jsonrpc import ServiceProxy
-import ConfigParser
-import sys, os.path
-import logging
+import ConfigParser, sys, os.path, logging
+import poster 
+from urllib2 import Request, urlopen, URLError, HTTPError
 
 logger = logging.getLogger('AgileCLU')
 hdlr = logging.FileHandler( '/var/log/agileclu.log' )
@@ -26,15 +26,8 @@ logger.addHandler(hdlr)
 logger.setLevel(logging.INFO)
 
 
-# import sys, subprocess, os.path, string
-# from optparse import OptionParser, OptionGroup
-# from urlparse import urlparse
-
-
 cfg = ConfigParser.ConfigParser() 
-true = 1
-false = 0
-version = '0.1'
+version = '0.2'
 
 class	AgileCLU:
 
@@ -129,10 +122,10 @@ class	AgileCLU:
 			r = self.deleteFile(path)
 			if (r == 0): 
 				logger.info( self.uid+" "+self.token+", rm "+path+" succeeded" )
-				return true
+				return True
 			else: 
 				logger.warning( self.uid+" "+self.token+", rm "+path+" failed" )
-				return false
+				return False
 		else:
 			logger.warning( self.uid+" "+self.token+", rm "+path+" skipped nonexistent file" )
 
@@ -179,20 +172,20 @@ class	AgileCLU:
 	def	fexists( self, path ):
 		r = self.stat( path )
 		logger.info( self.uid+" "+self.token+", fexists "+path+" = "+str(r) )
-		if ((r['code'] == 0) and (r['type'] == 2)): return true
-		else: return false
+		if ((r['code'] == 0) and (r['type'] == 2)): return True
+		else: return False
 
 	def	dexists( self, path ):
 		r = self.stat( path )
 		logger.info( self.uid+" "+self.token+", dexists "+path+" = "+str(r) )
-		if ((r['code'] == 0) and (r['type'] == 1)): return true
-		else: return false
+		if ((r['code'] == 0) and (r['type'] == 1)): return True
+		else: return False
 
 	def	exists(self, path):
 		logger.info( self.uid+" "+self.token+", exists "+path )
 		# +" = "+str(r) )
-		if (self.fexists(path) or self.dexists(path)): return true
-		else: return false
+		if (self.fexists(path) or self.dexists(path)): return True
+		else: return False
 
 	def	mkdir(self, path, recursive = False):
 		logger.info( self.uid+" "+self.token+", mkdir "+path )
@@ -203,10 +196,44 @@ class	AgileCLU:
 			else:
 				r = self.makeDir( path )
 			if (r == 0): 
-				return true
+				return True
 			else: 
-				return false
+				return False
 		else:	
-			return false
+			return False
+
+	def	post(self, source, destination, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None):
+		logger.info( self.uid+" "+self.token+", post "+source+" "+destination+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
+		if (not os.path.isfile(source)): logger.info( "local("+source+") does not exist") ; return False 
+		if (not self.dexists(destination)): logger.info( "remote("+destination+") does not exist") ; return False
+
+		source_path = os.path.dirname(source) ; source_name = os.path.basename(source)
+	
+		poster.streaminghttp.register_openers()
+	
+		if callback<>None:
+			datagen, headers = poster.encode.multipart_encode( {
+				"uploadFile": open(source, "rb"),
+				"directory": destination,
+				"basename": source_name,
+				"expose_egress": egress_policy
+				}, cb=callback)
+		else:
+			datagen, headers = poster.encode.multipart_encode( {
+				"uploadFile": open(source, "rb"),
+				"directory": destination,
+				"basename": source_name,
+				"expose_egress": egress_policy
+				} )
+
+		request = Request(self.posturl, datagen, headers)
+		request.add_header("X-LLNW-Authorization", self.token)
+		request.add_header("X-Content-Type", mimetype )
+
+		try: result = urlopen(request).read()
+		except HTTPError, e: logger.info( 'HTTP Error: '+str(e.code) ) ; return False
+		except URLError, e: logger.info( 'URL Error: '+str(e.reason) ) ; return False
+
+		return True
 
 # End of agile.py
