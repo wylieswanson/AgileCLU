@@ -1,0 +1,244 @@
+#!/usr/bin/env python
+
+from AgileCLU import AgileCLU
+import os, sys, urllib, json, progressbar, hashlib
+
+agile = None ; pbar = None ; fname = None
+
+def sha256sum(f):
+	sha256 = hashlib.sha256()
+	with open(f,'rb') as f:
+  		for chunk in iter(lambda: f.read(8192), ''): sha256.update(chunk)
+	return sha256.hexdigest()
+
+def progress_callback(param, current, total):
+	global pbar
+	if (pbar==None):
+		widgets = [ unicode(fname, errors='ignore').encode('utf-8'), ' ', progressbar.FileTransferSpeed(), ' [', progressbar.Bar(), '] ', progressbar.Percentage(), ' ', progressbar.ETA() ]
+		pbar = progressbar.ProgressBar(widgets=widgets, maxval=total).start()
+	try:
+		pbar.update(current)
+	except AssertionError, e:
+		print e
+
+class AgileChunkyException(Exception):
+	def __init__(self, value):
+		self.value = value
+
+	def __str__(self):
+		return str(self.value)
+
+def usage():
+	return """\nUsage: agilechunky -i <inputfile> -n <numchunks> [option]\n
+	Options:\n
+	-s, --split  Split file into chunks
+	-j, --join   Join chunks back to file.
+	"""
+
+class AgileChunky:
+	""" File splitter class """
+
+	def __init__(self):
+
+		# cache filename
+		self.__filename = ''
+		# checksum of asset
+		self.__sha256 = ''
+		# number of equal sized chunks
+		self.__numchunks = 4
+		# Size of each chunk
+		self.__chunksize = 0
+		# Optional postfix string for the chunk filename
+		self.__postfix = ''
+		# Program name
+		self.__progname = "agilechunky"
+		# Action
+		self.__action = 0 # split
+
+	def parseOptions(self, args):
+
+		import getopt
+
+		try:
+			optlist, arglist = getopt.getopt(args, 'sji:n:', ["split=", "join="])
+		except getopt.GetoptError, e:
+			print e
+			return None
+
+		for option, value in optlist:
+			if option.lower() in ('-i', ):
+				self.__filename = value
+			elif option.lower() in ('-n', ):
+				self.__numchunks = int(value)
+			elif option.lower() in ('-s', '--split'):
+				self.__action = 0 # split
+			elif option.lower() in ('-j', '--join'):
+				self.__action = 1 # combine
+
+		if not self.__filename:
+			sys.exit("Error: filename not given")
+		
+	def do_work(self):
+		if self.__action==0:
+			self.split()
+		elif self.__action==1:
+			self.combine()
+		else:
+			return None
+		
+	def split(self):
+		global fname, pbar
+		""" Split the file and save chunks to separate files """
+
+		destination = "/chunky/"+self.__filename+".chunky"
+		fname =destination
+		agile.mkdir( destination )
+		self.__sha256 = sha256sum( self.__filename )
+
+		print 'Splitting file', self.__filename
+		print 'SHA-256', self.__sha256
+		print 'Number of chunks', self.__numchunks, '\n'
+
+		
+		try:
+			f = open(self.__filename, 'rb')
+		except (OSError, IOError), e:
+			raise AgileChunkyException, str(e)
+
+		bname = (os.path.split(self.__filename))[1]
+		# Get the file size
+		fsize = os.path.getsize(self.__filename)
+		# Get size of each chunk
+		self.__chunksize = int(float(fsize)/float(self.__numchunks))
+
+		chunksz = self.__chunksize
+		total_bytes = 0
+		manifest = ''
+
+		for x in range(self.__numchunks):
+			chunkfilename = bname + '-' + str(x+1) + self.__postfix
+
+			# if reading the last section, calculate correct
+			# chunk size.
+			if x == self.__numchunks - 1:
+				chunksz = fsize - total_bytes
+
+			try:
+				# print 'Writing file',chunkfilename
+				data = f.read(chunksz)
+				total_bytes += len(data)
+				chunkf = file(chunkfilename, 'wb')
+				chunkf.write(data)
+				chunkf.close()
+			except (OSError, IOError), e:
+				print e
+				continue
+			except EOFError, e:
+				print e
+				break
+
+			# print "Uploading "+chunkfilename+" -> "+destination
+			fname = chunkfilename
+			result = agile.post(chunkfilename, destination, chunkfilename, 'name', None, 'COMPLETE', True, progress_callback )
+			pbar.finish() ; pbar=None
+			if (manifest<>''): manifest = manifest+','
+			manifest = manifest + '''{ "chunk": "'''+chunkfilename+'''", "sha-256": "'''+sha256sum(chunkfilename)+'''" }'''
+			os.remove(chunkfilename)
+		
+		jsonstr = '''{ "filename": "'''+self.__filename+'''", "chunks": '''+str(self.__numchunks)+''', "sha-256": "'''+self.__sha256+'''", "manifest": [ '''+manifest+''' ] }'''
+		fname = self.__filename+"-0" # manifest
+		f = open ( fname, "w" )
+		f.write( jsonstr )
+		f.close()
+		result = agile.post(fname, destination, fname, 'name', None, 'COMPLETE', True, progress_callback )
+		pbar.finish() 
+		pbar = None
+		os.remove( fname )
+		print 'Done.'
+
+	def sort_index(self, f1, f2):
+
+		index1 = f1.rfind('-')
+		index2 = f2.rfind('-')
+		
+		if index1 != -1 and index2 != -1:
+			i1 = int(f1[index1:len(f1)])
+			i2 = int(f2[index2:len(f2)])
+			return i2 - i1
+		
+	def combine(self):
+		""" Combine existing chunks to recreate the file.
+		The chunks must be present in the cwd. The new file
+		will be written to cwd. """
+
+		import re
+		
+		if os.path.isfile(self.__filename):
+			os.remove(self.__filename)
+
+		print 'Creating file', self.__filename,
+		
+		bname = (os.path.split(self.__filename))[1]
+		bname2 = bname
+		
+		# bugfix: if file contains characters like +,.,[]
+		# properly escape them, otherwise re will fail to match.
+		for a, b in zip(['+', '.', '[', ']','$', '(', ')'], ['\+','\.','\[','\]','\$', '\(', '\)']):
+			bname2 = bname2.replace(a, b)
+			
+		chunkre = re.compile(bname2 + '-' + '[0-9]+')
+		
+		urllib.urlretrieve ( "http://global.mt.lldns.net/llnw/staff/wylie/chunky/"+self.__filename+".chunky/"+self.__filename+"-0", self.__filename+"-0" )
+
+		f = open( self.__filename+"-0", 'r' ) ; jsonstr = f.readline() ; f.close() ; os.remove( self.__filename+"-0" )
+		object=json.loads(jsonstr)
+
+		print " "+object['sha-256']
+
+		chunkfiles = []
+		for chunk in object['manifest']:
+			print chunk['chunk']+" "+chunk['sha-256']
+			if chunkre.match(chunk['chunk']):
+				chunkfiles.append(chunk['chunk'])
+
+
+		print 'Number of chunks', len(chunkfiles), '\n'
+		chunkfiles.sort(self.sort_index)
+
+		data=''
+		try:
+			cmbf = open(bname, 'ab')
+			for f in chunkfiles:
+				try:
+					urllib.urlretrieve ( "http://global.mt.lldns.net/llnw/staff/wylie/chunky/"+self.__filename+".chunky/"+f, f )
+					print 'Appending chunk', os.path.join(".", f)
+					#data += open(f, 'rb').read()
+					data = open(f, 'rb').read()
+					cmbf.write(data)
+				except (OSError, IOError, EOFError), e:
+					print e
+					continue
+				os.remove( f )
+			cmbf.close()
+
+		except (OSError, IOError, EOFError), e:
+			raise AgileChunkyException, str(e)
+
+		print 'Wrote file', bname
+		print sha256sum(bname)
+
+def main():
+	import sys
+	global agile
+
+	if len(sys.argv)<2:
+		sys.exit(usage())
+		
+	agile = AgileCLU('wylie')
+	fsp = AgileChunky()
+	fsp.parseOptions(sys.argv[1:])
+	fsp.do_work()
+	agile.logout()
+
+if __name__=="__main__":
+	main()
