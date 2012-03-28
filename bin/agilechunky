@@ -29,10 +29,10 @@ class AgileChunkyException(Exception):
 		return str(self.value)
 
 def usage():
-	return """\nUsage: agilechunky -i <inputfile> -n <numchunks> [option]\n
+	return """\nUsage: agilechunky -i <inputfile> -n <numchunks> -s <sizechunks> [option]\n
 	Options:\n
-	-s, --split  Split file into chunks
-	-j, --join   Join chunks back to file.
+	-d, --disassemble  Disassemble chunks and store to Agile.
+	-r, --reassemble   Retrieve and assemble chunks back to file.
 	"""
 
 class AgileChunky:
@@ -60,7 +60,7 @@ class AgileChunky:
 		import getopt
 
 		try:
-			optlist, arglist = getopt.getopt(args, 'sji:n:', ["split=", "join="])
+			optlist, arglist = getopt.getopt(args, 'dri:n:', ["disassemble=", "reassemble="])
 		except getopt.GetoptError, e:
 			print e
 			return None
@@ -70,9 +70,9 @@ class AgileChunky:
 				self.__filename = value
 			elif option.lower() in ('-n', ):
 				self.__numchunks = int(value)
-			elif option.lower() in ('-s', '--split'):
+			elif option.lower() in ('-d', '--disassemble'):
 				self.__action = 0 # split
-			elif option.lower() in ('-j', '--join'):
+			elif option.lower() in ('-r', '--reassemble'):
 				self.__action = 1 # combine
 
 		if not self.__filename:
@@ -92,7 +92,7 @@ class AgileChunky:
 
 		destination = "/chunky/"+self.__filename+".chunky"
 		fname =destination
-		agile.mkdir( destination )
+		if not agile.dexists( destination ): agile.mkdir( destination )
 		self.__sha256 = sha256sum( self.__filename )
 
 		print 'Splitting file', self.__filename
