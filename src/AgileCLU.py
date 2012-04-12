@@ -52,6 +52,10 @@ class	AgileCLU:
 
 		self.api = ServiceProxy( self.apiurl )
 		self.token, self.user = self.api.login( self.uid, upw )
+		if self.token is None:
+			print "Autentication for '"+str(self.uid)+"' failed. Please check credentials.  Exiting."
+			logger.critical( self.uid+" login failed - check account credentials" )
+			sys.exit(1)
 
 		logger.info( self.uid+" "+self.token+", login "+str(self.user)+" tokenized" )
 	
@@ -200,6 +204,14 @@ class	AgileCLU:
 			else: 
 				return False
 		else:	
+			return False
+
+	def	read(self, path):
+		logger.info( self.uid+" "+self.token+", read "+self.mapper.url+urllib2.quote(path) )
+		if (self.fexists(path)):
+			response = urllib2.urlopen( self.mapperurl+urllib2.quote(path) )
+			return response.read()
+		else:
 			return False
 
 	def	post(self, source, destination, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None):
