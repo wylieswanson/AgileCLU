@@ -104,7 +104,7 @@ def main():
 			} )
 
 	request = Request(agile.posturl, datagen, headers)
-	request.add_header("X-LLNW-Authorization", agile.token)
+	request.add_header("X-Agile-Authorization", agile.token)
 
 	if options.mimetype: mimetype = options.mimetype
 	else: mimetype = 'auto'
