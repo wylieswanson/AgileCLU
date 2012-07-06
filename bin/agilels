@@ -57,7 +57,7 @@ def main():
 		class DirWalker(object):
 
 			def walk(self,path,meth):
-				dir = agile.listDir( path,  1000, 0, 0 )
+				dir = agile.listDir( path,  1000, 0, 1 )
 				dir['list'] = sorted(dir['list'], key=str)
                 		for item in dir['list']:
 		                        itemurl = os.path.join(path,item['name'])
@@ -83,7 +83,7 @@ def main():
 		if options.recurse: 
 			DirWalker().walk(path,FileWalker)
 		else: 
-                        dir = agile.listDir( path,  1000, 0, 0 )
+                        dir = agile.listDir( path,  1000, 0, 1 )
 			dir['list'] = sorted(dir['list'], key=str)
                         for item in dir['list']:
                         	itemurl = os.path.join(path,item['name'])
