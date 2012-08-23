@@ -239,7 +239,7 @@ class	AgileCLU:
 				} )
 
 		request = Request(self.posturl, datagen, headers)
-		request.add_header("X-LLNW-Authorization", self.token)
+		request.add_header("X-Agile-Authorization", self.token)
 		request.add_header("X-Content-Type", mimetype )
 
 		try: result = urlopen(request).read()
