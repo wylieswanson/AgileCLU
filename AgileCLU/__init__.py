@@ -1,25 +1,26 @@
-#!/usr/bin/python
-# Filename: AgileCLU.py
-# coding: utf-8
-#
-# Copyright (C) 2010-2011, Wylie Swanson
-#
-# This Program is free software; you can redistribute it and/or modify
-# it under the terms of the GNU General Public License V3, as published by
-# the Free Software Foundation.
-#
-# This Program is distributed in the hope that it will be useful,
-# but WITHOUT ANY WARRANTY; without even the implied warranty of
-# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
-# GNU General Public License for more details.
+"""
 
-from jsonrpc import ServiceProxy
+  AgileCLU: an Agile Storage command line to API abstraction.
+
+This module provides an abstract base class 'AgileCLU' that defines a consistent
+interface to Agile command line utilities.
+
+"""
+
+__version__ = "0.3.0"
+__author__ = "Wylie Swanson (wylie@pingzero.net)"
+
+
+import jsonrpclib
 import ConfigParser, sys, os.path, logging
 import poster 
+import pyDes, md5, hashlib, base64
 from urllib2 import Request, urlopen, URLError, HTTPError
 
+
+
 logger = logging.getLogger('AgileCLU')
-hdlr = logging.FileHandler( '/var/log/agileclu.log' )
+hdlr = logging.FileHandler( '/var/log/agilepy.log' )
 formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
 hdlr.setFormatter(formatter)
 logger.addHandler(hdlr)
@@ -27,33 +28,67 @@ logger.setLevel(logging.INFO)
 
 
 cfg = ConfigParser.ConfigParser() 
-version = '0.2'
+version = '0.3'
+
+def epwbasekey( username, proto, hostname, basepath ):
+   m = md5.new()
+   m.update( username )
+   m.update( proto )
+   m.update( hostname )
+   m.update( basepath )
+   key = base64.b64encode(hashlib.sha256( m.digest() ).digest())
+   return key[0:24]
+
+def e_pw_hash( str, username, proto, hostname, basepath ):
+   return base64.b64encode(pyDes.triple_des(epwbasekey(username,proto,hostname,basepath)).encrypt(str, padmode=2))
+
+def e_pw_dehash( str, username, proto, hostname, basepath ):
+	basekey=epwbasekey(username,proto,hostname,basepath)
+	try:
+		b64decode=base64.b64decode(str)
+	except TypeError:
+		b64decode="12345678"
+	try:
+		dehash = pyDes.triple_des(basekey).decrypt(b64decode, padmode=2)
+	except TypeError:
+		dehash = "12345678"
+	return dehash
 
 class	AgileCLU:
-
-        def     __init__(self, username='agile'):
+	def     __init__(self, profile='agile'):
 
 		# Load configuration variables
 
-		if os.path.exists('/etc/agile/'+username+'.conf'): cfg.read('/etc/agile/'+username+'.conf')
+		if os.path.exists('/etc/agile/'+profile+'.conf'): cfg.read('/etc/agile/'+profile+'.conf')
 		else:
-			print "Alternate login identity (%s) configuration does not exist.  Exiting." % username
-			logger.critical( "configuration /etc/agile/"+username+".conf does not exist" )
+			print "Profile (%s) configuration does not exist.  Exiting." % profile
+			logger.critical( "configuration /etc/agile/"+profile+".conf does not exist" )
 			sys.exit(1)
 
 		self.uid = cfg.get("Identity", "username")
-		upw = cfg.get("Identity", "password")
+
+
+		self.egress_protocol = cfg.get("Egress", "protocol")
+		self.egress_hostname = cfg.get("Egress", "hostname")
+		self.egress_basepath = cfg.get("Egress", "basepath")
+
+		self.mapperurl = self.egress_protocol + "://" + self.egress_hostname + self.egress_basepath
+
 		self.apiurl = cfg.get("Ingest", "apiurl")
 		self.posturl = cfg.get("Ingest", "posturl")
-		self.mapperurl = cfg.get("Egress", "mapperurl")
-		self.cacheurl = cfg.get("Egress", "mapperurl")
+
+		upw = e_pw_dehash( 
+			cfg.get("Identity", "password"), 
+			self.uid, 
+			self.egress_protocol, 
+			self.egress_hostname, 
+			self.egress_basepath )
 
 		# connect to API, authenticate, and get a token
-
-		self.api = ServiceProxy( self.apiurl )
+		self.api = jsonrpclib.Server( self.apiurl )
 		self.token, self.user = self.api.login( self.uid, upw )
 		if self.token is None:
-			print "Autentication for '"+str(self.uid)+"' failed. Please check credentials.  Exiting."
+			print "Authentication for '"+str(self.uid)+"' failed. Please check credentials.  Exiting!"
 			logger.critical( self.uid+" login failed - check account credentials" )
 			sys.exit(1)
 

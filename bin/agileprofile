@@ -1,0 +1,39 @@
+#!/usr/bin/env python
+
+# will revisit this later
+
+import getpass, AgileCLU
+
+username = raw_input("Enter Agile username: ")
+
+password1 = "1"
+password2 = "2"
+while (password1 != password2 ):
+	password1 = getpass.getpass("Enter Agile password: ")
+	password2 = getpass.getpass("Re-enter Agile password: ")
+
+proto = "http"
+hostname = "global.mt.lldns.net"
+basepath = raw_input("Enter your base path (e.g. \"/llnw/staff/"+username+"\"): " )
+
+apiurl = "https://api.lama.lldns.net/jsonrpc"
+posturl = "https://api.lama.lldns.net/post/file"
+
+cipher = AgileCLU.e_pw_hash( password1, username, proto, hostname, basepath )
+print "\n\n### SNIP ####"
+print "\n[Identity]"
+print "username = "+ username
+print "password = "+ cipher
+print "\n[Egress]"
+print "protocol = "+ proto
+print "hostname = "+ hostname
+print "basepath = "+ basepath
+print "\n[Ingest]"
+print "apiurl = "+ apiurl
+print "posturl = "+ posturl
+print "\n[Logging]"
+print "enabled = no"
+print "logfile = /var/log/agileclu.log"
+
+
+
