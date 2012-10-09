@@ -7,7 +7,7 @@ interface to Agile command line utilities.
 
 """
 
-__version__ = "0.3.0"
+__version__ = "0.3.1"
 __author__ = "Wylie Swanson (wylie@pingzero.net)"
 
 
@@ -18,17 +18,9 @@ import pyDes, md5, hashlib, base64
 from urllib2 import Request, urlopen, URLError, HTTPError
 
 
-
 logger = logging.getLogger('AgileCLU')
-hdlr = logging.FileHandler( '/var/log/agilepy.log' )
-formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
-hdlr.setFormatter(formatter)
-logger.addHandler(hdlr)
-logger.setLevel(logging.INFO)
-
-
+logger.addHandler(logging.NullHandler())
 cfg = ConfigParser.ConfigParser() 
-version = '0.3'
 
 def epwbasekey( username, proto, hostname, basepath ):
    m = md5.new()
@@ -51,10 +43,12 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 	try:
 		dehash = pyDes.triple_des(basekey).decrypt(b64decode, padmode=2)
 	except TypeError:
-		dehash = "12345678"
+		dehash = "87654321"
 	return dehash
 
 class	AgileCLU:
+
+
 	def     __init__(self, profile='agile'):
 
 		# Load configuration variables
@@ -62,20 +56,22 @@ class	AgileCLU:
 		if os.path.exists('/etc/agile/'+profile+'.conf'): cfg.read('/etc/agile/'+profile+'.conf')
 		else:
 			print "Profile (%s) configuration does not exist.  Exiting." % profile
-			logger.critical( "configuration /etc/agile/"+profile+".conf does not exist" )
+			# logger.critical( "configuration /etc/agile/"+profile+".conf does not exist" )
 			sys.exit(1)
 
 		self.uid = cfg.get("Identity", "username")
 
-
 		self.egress_protocol = cfg.get("Egress", "protocol")
 		self.egress_hostname = cfg.get("Egress", "hostname")
 		self.egress_basepath = cfg.get("Egress", "basepath")
+		
+		self.ingest_protocol = cfg.get("Ingest", "protocol")
+		self.ingest_hostname = cfg.get("Ingest", "hostname")
 
 		self.mapperurl = self.egress_protocol + "://" + self.egress_hostname + self.egress_basepath
-
-		self.apiurl = cfg.get("Ingest", "apiurl")
-		self.posturl = cfg.get("Ingest", "posturl")
+	
+		self.apiurl = self.ingest_protocol + "://" + self.ingest_hostname + "/jsonrpc"
+		self.posturl = self.ingest_protocol + "://" + self.ingest_hostname + "/post/file"
 
 		upw = e_pw_dehash( 
 			cfg.get("Identity", "password"), 
@@ -83,6 +79,21 @@ class	AgileCLU:
 			self.egress_protocol, 
 			self.egress_hostname, 
 			self.egress_basepath )
+
+		"""
+[Logging]
+enabled = no
+logfile = /var/log/agileclu.log
+level = info
+		"""
+
+		# initialize the logger for session
+		if cfg.getboolean("Logging", "enabled" ):
+			hdlr = logging.FileHandler( '/var/log/agileclu.log' )
+			formatter = logging.Formatter('%(asctime)s %(levelname)s %(message)s')
+			hdlr.setFormatter(formatter)
+			logger.addHandler(hdlr)
+			logger.setLevel(logging.INFO)
 
 		# connect to API, authenticate, and get a token
 		self.api = jsonrpclib.Server( self.apiurl )

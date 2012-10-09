@@ -2,7 +2,10 @@
 
 # will revisit this later
 
-import getpass, AgileCLU
+import getpass
+from AgileCLU import epwbasekey, e_pw_hash
+
+
 
 username = raw_input("Enter Agile username: ")
 
@@ -12,28 +15,30 @@ while (password1 != password2 ):
 	password1 = getpass.getpass("Enter Agile password: ")
 	password2 = getpass.getpass("Re-enter Agile password: ")
 
-proto = "http"
-hostname = "global.mt.lldns.net"
-basepath = raw_input("Enter your base path (e.g. \"/llnw/staff/"+username+"\"): " )
+egress_protocol = "http"
+egress_hostname = raw_input("Enter your egress hostname (e.g. \"global.mt.lldns.net\"): " )
+egress_basepath = raw_input("Enter your egress base path (e.g. \"/llnw/staff/"+username+"\"): " )
+
+ingest_protocol = "https"
+ingest_hostname = raw_input("Enter your ingest hostname (e.g. \"api.lama.lldns.net\"): " )
 
 apiurl = "https://api.lama.lldns.net/jsonrpc"
 posturl = "https://api.lama.lldns.net/post/file"
 
-cipher = AgileCLU.e_pw_hash( password1, username, proto, hostname, basepath )
+cipher = e_pw_hash( password1, username, egress_protocol, egress_hostname, egress_basepath )
 print "\n\n### SNIP ####"
 print "\n[Identity]"
 print "username = "+ username
 print "password = "+ cipher
 print "\n[Egress]"
-print "protocol = "+ proto
-print "hostname = "+ hostname
-print "basepath = "+ basepath
+print "protocol = "+ egress_protocol
+print "hostname = "+ egress_hostname
+print "basepath = "+ egress_basepath
 print "\n[Ingest]"
-print "apiurl = "+ apiurl
-print "posturl = "+ posturl
+print "protocol = "+ ingest_protocol
+print "hostname = "+ ingest_hostname
 print "\n[Logging]"
 print "enabled = no"
 print "logfile = /var/log/agileclu.log"
-
-
+print "level = info"
 
