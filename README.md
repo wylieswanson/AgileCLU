@@ -86,3 +86,8 @@ This package has the following requirements:
 * pydes by Todd Whiteman - used as part of the password encryption scheme for config files (http://twhiteman.netfirms.com/des.html)
 * jsonrpclib by John Marshall - an implementation of the JSON-RPC specification (https://github.com/joshmarshall/jsonrpclib)
 
+Storage Locations
+-----------------
+As of October 2012, the Agile Storage Cloud has storage capacity in 34 geographies around the world.
+
+[image]: https://raw.github.com/wylieswanson/AgileCLU/master/agile_locations_oct_2012.jpg
