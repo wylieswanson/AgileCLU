@@ -4,3 +4,4 @@ global-exclude *.pyc
 exclude build
 exclude dist
 exclude AgileCLU.egg-info
+exclude agile_locations_oct_2012.jpg
