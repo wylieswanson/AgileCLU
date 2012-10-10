@@ -56,7 +56,7 @@ Enter your egress hostname: global.mt.lldns.net
 Enter your egress base path: /testcompany
 Enter your ingest hostname: api.agile.lldns.net
 
-### PASTE THE FOLLOWING IN YOUR PROFILE CONFIGURATION FILE ####
+PASTE THE FOLLOWING IN YOUR PROFILE CONFIGURATION FILE 
 
 [Identity]
 username = testcompany
@@ -74,7 +74,7 @@ hostname = api.agile.lldns.net
 [Logging]
 enabled = no
 logfile = /var/log/agileclu.log
-level = info```
+level = info
 ---
 
 Requirements
