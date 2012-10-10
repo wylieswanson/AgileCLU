@@ -22,7 +22,7 @@ while (password1 != password2 ):
 print "\n"
 egress_protocol = "http"
 egress_hostname = raw_input("Enter your egress hostname (e.g. \"global.mt.lldns.net\"): " )
-egress_basepath = raw_input("Enter your egress base path (e.g. \"/company\"): )
+egress_basepath = raw_input("Enter your egress base path (e.g. \"/company\"): ")
 
 ingest_protocol = "https"
 ingest_hostname = raw_input("Enter your ingest hostname (e.g. \"api.agile.lldns.net\"): " )
