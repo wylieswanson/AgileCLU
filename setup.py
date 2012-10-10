@@ -7,19 +7,19 @@ readme = open(os.path.join(here,"README.md")).read()
 
 setup(  
 	name="AgileCLU",
-	version="0.3.6",
+	version="0.3.7",
    install_requires=['poster','progressbar','pydes','jsonrpclib'],
 	packages=['AgileCLU'],
 	package_data={'': ['LICENSE','README.md']},
 	include_package_data=True,
-	scripts=['bin/agilels', 'bin/agilefetch', 'bin/agilemkdir', 'bin/agilepost', 'bin/agileprofile', 'bin/agilerm'],
+	scripts=['bin/agilels', 'bin/agilefetch', 'bin/agilemkdir', 'bin/agilepost', 'bin/agileprofile', 'bin/agilerm', 'bin/agilels.py', 'bin/agilefetch.py', 'bin/agilemkdir.py', 'bin/agilepost.py', 'bin/agileprofile.py', 'bin/agilerm.py'],
 
 	description="Agile Command Line Utilities",
 	long_description=readme,
 	author="Wylie Swanson",
 	author_email="wylie@pingzero.net",
 	url = "http://pypi.python.org/pypi/AgileCLU",
-	download_url = "https://github.com/wylieswanson/AgileCLU/raw/master/dist/AgileCLU-0.3.6.tar.gz",
+	download_url = "https://github.com/wylieswanson/AgileCLU/raw/master/dist/AgileCLU-0.3.7.tar.gz",
 
 	platforms = ("Any",),
 	keywords = ("agile", "storage", "limelight", "cloud", "object" ),

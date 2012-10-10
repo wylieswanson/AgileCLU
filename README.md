@@ -12,8 +12,8 @@ to send a message):
 https://github.com/wylieswanson/AgileCLU
 
 
-Installation
-------------
+Installation:Linux
+------------------
 You do not need to download the source code to install AgileCLU.  You can install this from PyPI with one of the following commands (sudo is usually required):
 
 	easy_install AgileCLU
@@ -25,6 +25,43 @@ or,
 If you don't have PyPI installed and you are running on Ubuntu or Debian, install it first.
 
 	sudo apt-get install python-pip
+
+Installation:Mac OSX
+--------------------
+Python is already installed by default on modern OS X.
+
+Installation:Windows 32-bit and 64-bit
+--------------------------------------
+Python must be installed on the machine.  You can download from http://www.python.org/getit/ or, specifically, for Windows 32 and 64-bit:
+
+* Python 2.7.3 Windows Installer (Windows binary - does not include source)
+	* http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi
+
+* Python 2.7.3 Windows X86-64 Installer (Windows AMD64 / Intel 64 / X86-64 bainry - does not include source)
+	* http://www.python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi
+
+Once Python has been installed, you will want to add setuptools, the mainstream package manager for Python, also known as PyPI.
+
+Next, set the system's PATH variable to include directories that include Python components and packages we'll add later.  To do this:
+
+* Click the bottom left Windows icon
+* In the search field, type 'system'
+* In the Control Panel section of the search results, select "Edit system environment variables"
+* Select "Environment Variables"
+* In the "System variables" section, scroll down to Path and click "Edit...", and then append ";\Python27;\Python27\Lib\site-packages;\Python27\Scripts;" to the "Variable Value", then select OK.
+
+
+* For 32-bit version of Python 
+	* Install setuptools using the provided .exe installer.
+		* http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe
+
+* For 64-bit versions of Python
+	* Download ez_setup.py and run it; it will download the appropriate .egg file and install it for you. (Currently, the provided .exe installer does not support 64-bit versions of Python for Windows, due to a distutils installer compatibility issue.
+		* http://peak.telecommunity.com/dist/ez_setup.py
+		* Run "ez_setup.py"
+
+
+easy_install AgileCLU
 
 Upgrading
 ---------
