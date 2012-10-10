@@ -2,10 +2,9 @@
 
 # will revisit this later
 
-import getpass
-from AgileCLU import epwbasekey, e_pw_hash
+import AgileCLU, getpass
 
-print "agileprofile (AgileCLU "+AgileCLU.__version__+")\n"
+print "\nagileprofile (AgileCLU " + AgileCLU.AgileCLU.__version__ + ")\n"
 print "This tool generates Agile Storage profile text to be pasted into AgileCLU profile configuration"
 print "files (eg. /etc/agile/agile.conf is the default).  The information should have been provided to"
 print "you by Limelight Networks, often via a \"welcome letter\".  If you have questions regarding the"
@@ -19,15 +18,15 @@ while (password1 != password2 ):
 	password1 = getpass.getpass("Enter Agile password: ")
 	password2 = getpass.getpass("Re-enter Agile password: ")
 
-print "\n"
 egress_protocol = "http"
-egress_hostname = raw_input("Enter your egress hostname (e.g. \"global.mt.lldns.net\"): " )
-egress_basepath = raw_input("Enter your egress base path (e.g. \"/company\"): ")
+egress_hostname = raw_input("Enter your egress hostname: " )
+egress_basepath = raw_input("Enter your egress base path: " )
 
 ingest_protocol = "https"
-ingest_hostname = raw_input("Enter your ingest hostname (e.g. \"api.agile.lldns.net\"): " )
+ingest_hostname = raw_input("Enter your ingest hostname: " )
 
-cipher = e_pw_hash( password1, username, egress_protocol, egress_hostname, egress_basepath )
+cipher = AgileCLU.e_pw_hash( password1, username, egress_protocol, egress_hostname, egress_basepath )
+
 print "\n\n### PASTE THE FOLLOWING IN YOUR PROFILE CONFIGURATION FILE ####"
 print "\n[Identity]"
 print "username = "+ username

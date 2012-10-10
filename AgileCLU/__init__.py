@@ -40,7 +40,7 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.3.3"
+	__version__ = "0.3.6"
 
 	def     __init__(self, profile='agile'):
 
