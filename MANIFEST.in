@@ -1,0 +1,6 @@
+include README.md
+include LICENSE
+global-exclude *.pyc
+exclude build
+exclude dist
+exclude AgileCLU.egg-info
