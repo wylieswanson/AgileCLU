@@ -25,7 +25,9 @@ If you don't have PyPI installed and you are running on Ubuntu or Debian, instal
 
 Configuration 
 -------------
-After installing AgileCLU, run "agileprofile" and put the output in /etc/agile/agile.conf.
+After installing AgileCLU, run use the profile tool to generate the proper output to place in an /etc/agile/agile.conf configuration file.  You can create as many configuration profiles as you like, specifying to use them over the default agile.conf profile by specifying the -l option on any given command.
+
+	agileprofile
 
 Requirements
 ------------
