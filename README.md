@@ -41,7 +41,8 @@ After installing AgileCLU, run use the profile tool to generate the proper outpu
 
 Example output:
 
-```agileprofile (AgileCLU 0.3.6)
+--- sh
+agileprofile (AgileCLU 0.3.6)
 
 This tool generates Agile Storage profile text to be pasted into AgileCLU profile configuration
 files (eg. /etc/agile/agile.conf is the default).  The information should have been provided to
@@ -54,7 +55,6 @@ Re-enter Agile password:
 Enter your egress hostname: global.mt.lldns.net
 Enter your egress base path: /testcompany
 Enter your ingest hostname: api.agile.lldns.net
-
 
 ### PASTE THE FOLLOWING IN YOUR PROFILE CONFIGURATION FILE ####
 
@@ -75,6 +75,7 @@ hostname = api.agile.lldns.net
 enabled = no
 logfile = /var/log/agileclu.log
 level = info```
+---
 
 Requirements
 ------------
