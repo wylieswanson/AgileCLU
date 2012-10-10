@@ -1,11 +1,9 @@
 #!/usr/bin/env python
-from glob import glob
-from setuptools import setup, find_packages
-import sys
+from setuptools import setup
 
 setup(  
 	name="AgileCLU",
-	version="0.3.0",
+	version="0.3.1",
    install_requires=['poster','progressbar','pydes','jsonrpclib'],
 
 	description="Agile Command Line Utilities",
@@ -30,8 +28,5 @@ This package uses the Limelight Networks Agile Storage APIs to manage objects in
 	keywords = ("agile", "storage", "limelight", "cloud", "object" ),
 
 	packages=['AgileCLU'],
-	scripts=glob("bin/*"),
-	data_files=[
-		( '/etc/agile/', glob('agile/*') ),
-	]
+	scripts=['bin/agilels', 'bin/agilefetch', 'bin/agilemkdir', 'bin/agilepost', 'bin/agileprofile', 'bin/agilerm'],
 	)

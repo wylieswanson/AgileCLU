@@ -6,17 +6,14 @@ This module provides an abstract base class 'AgileCLU' that defines a consistent
 interface to Agile command line utilities.
 
 """
-
 __version__ = "0.3.1"
 __author__ = "Wylie Swanson (wylie@pingzero.net)"
-
 
 import jsonrpclib
 import ConfigParser, sys, os.path, logging
 import poster 
 import pyDes, md5, hashlib, base64
 from urllib2 import Request, urlopen, URLError, HTTPError
-
 
 logger = logging.getLogger('AgileCLU')
 logger.addHandler(logging.NullHandler())
@@ -53,7 +50,6 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 
-
 	def     __init__(self, profile='agile'):
 
 		# Load configuration variables
@@ -69,7 +65,6 @@ class	AgileCLU:
 			print "Profile was written for an earlier release of AgileCLU tools.  Please see README."
 			sys.exit(1)
 
-
 		self.uid = cfg.get("Identity", "username")
 
 		self.egress_protocol = cfg.get("Egress", "protocol")
@@ -80,27 +75,16 @@ class	AgileCLU:
 		self.ingest_hostname = cfg.get("Ingest", "hostname")
 
 		self.mapperurl = self.egress_protocol + "://" + self.egress_hostname + self.egress_basepath
-	
 		self.apiurl = self.ingest_protocol + "://" + self.ingest_hostname + "/jsonrpc"
 		self.posturl = self.ingest_protocol + "://" + self.ingest_hostname + "/post/file"
 
 		upw = e_pw_dehash( 
 			cfg.get("Identity", "password"), 
-			self.uid, 
-			self.egress_protocol, 
-			self.egress_hostname, 
-			self.egress_basepath )
+			self.uid, self.egress_protocol, self.egress_hostname, self.egress_basepath )
 
 		if upw is "87654321":
 			print "Password is not valid. Was profile created with \"agileprofile\"?"
 			sys.exit(1)
-
-		"""
-[Logging]
-enabled = no
-logfile = /var/log/agileclu.log
-level = info
-		"""
 
 		# initialize the logger for session
 		if cfg.getboolean("Logging", "enabled" ):
