@@ -41,41 +41,39 @@ After installing AgileCLU, run use the profile tool to generate the proper outpu
 
 Example output:
 
---- sh
-agileprofile (AgileCLU 0.3.6)
-
-This tool generates Agile Storage profile text to be pasted into AgileCLU profile configuration
-files (eg. /etc/agile/agile.conf is the default).  The information should have been provided to
-you by Limelight Networks, often via a "welcome letter".  If you have questions regarding the
-account information, please contact support@llnw.com.
-
-Enter Agile username: testcompany
-Enter Agile password: 
-Re-enter Agile password: 
-Enter your egress hostname: global.mt.lldns.net
-Enter your egress base path: /testcompany
-Enter your ingest hostname: api.agile.lldns.net
-
-PASTE THE FOLLOWING IN YOUR PROFILE CONFIGURATION FILE 
-
-[Identity]
-username = testcompany
-password = A4UsWnRpKOdNy0HNWDHY+Q==
-
-[Egress]
-protocol = http
-hostname = global.mt.lldns.net
-basepath = /testcompany
-
-[Ingest]
-protocol = https
-hostname = api.agile.lldns.net
-
-[Logging]
-enabled = no
-logfile = /var/log/agileclu.log
-level = info
----
+	agileprofile (AgileCLU 0.3.6)
+	
+	This tool generates Agile Storage profile text to be pasted into AgileCLU profile configuration
+	files (eg. /etc/agile/agile.conf is the default).  The information should have been provided to
+	you by Limelight Networks, often via a "welcome letter".  If you have questions regarding the
+	account information, please contact support@llnw.com.
+	
+	Enter Agile username: testcompany
+	Enter Agile password: 
+	Re-enter Agile password: 
+	Enter your egress hostname: global.mt.lldns.net
+	Enter your egress base path: /testcompany
+	Enter your ingest hostname: api.agile.lldns.net
+	
+	PASTE THE FOLLOWING IN YOUR PROFILE CONFIGURATION FILE 
+	
+	[Identity]
+	username = testcompany
+	password = A4UsWnRpKOdNy0HNWDHY+Q==
+	
+	[Egress]
+	protocol = http
+	hostname = global.mt.lldns.net
+	basepath = /testcompany
+	
+	[Ingest]
+	protocol = https
+	hostname = api.agile.lldns.net
+	
+	[Logging]
+	enabled = no
+	logfile = /var/log/agileclu.log
+	level = info
 
 Requirements
 ------------
@@ -91,4 +89,4 @@ Storage Locations
 -----------------
 As of October 2012, the Agile Storage Cloud has storage capacity in 34 geographies around the world.
 
-[image]: https://raw.github.com/wylieswanson/AgileCLU/master/agile_locations_oct_2012.jpg
+![Agile Storage Locations](https://raw.github.com/wylieswanson/AgileCLU/master/agile_locations_oct_2012.jpg)
