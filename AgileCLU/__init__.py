@@ -31,7 +31,7 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 		if (len(b64decode) % 8 == 0):
 			dehash = pyDes.triple_des(basekey).decrypt(b64decode, padmode=2)
 		else:
-			print "Password is not valid. Was profile created with \"agileprofile\"?"
+			print "Password is not valid. Verify profile was built with \"agileprofile\" command."
 			sys.exit(1)
 	except TypeError, ValueError:
 		dehash = "87654321"
@@ -40,7 +40,7 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.3.2"
+	__version__ = "0.3.3"
 
 	def     __init__(self, profile='agile'):
 
@@ -48,13 +48,13 @@ class	AgileCLU:
 
 		if os.path.exists('/etc/agile/'+profile+'.conf'): cfg.read('/etc/agile/'+profile+'.conf')
 		else:
-			print "Profile (%s) configuration does not exist.  Exiting." % profile
+			print "Profile (%s) does not exist.  Create profile with \"agileprofile\" command." % profile
 			# logger.critical( "configuration /etc/agile/"+profile+".conf does not exist" )
 			sys.exit(1)
 
 		# minor check to look for compliant configuration file
 		if not cfg.has_option("Egress","protocol"):
-			print "Profile was written for an earlier release of AgileCLU tools.  Please see README."
+			print "Profile (%s) is not valid!  Create profile with \"agileprofile\" command." % profile
 			sys.exit(1)
 
 
@@ -80,15 +80,8 @@ class	AgileCLU:
 			self.egress_basepath )
 
 		if upw is "87654321":
-			print "Password is not valid. Was profile created with \"agileprofile\"?"
+			print "Password is not valid!  Verify profile was built with \"agileprofile\" command."
 			sys.exit(1)
-
-		"""
-[Logging]
-enabled = no
-logfile = /var/log/agileclu.log
-level = info
-		"""
 
 		# initialize the logger for session
 		if cfg.getboolean("Logging", "enabled" ):
@@ -102,7 +95,7 @@ level = info
 		self.api = jsonrpclib.Server( self.apiurl )
 		self.token, self.user = self.api.login( self.uid, upw )
 		if self.token is None:
-			print "Authentication for '"+str(self.uid)+"' failed. Please check credentials.  Exiting!"
+			print "Authentication for '"+str(self.uid)+"' failed!  It is recommended to generate a new profile with \"agileprofile\" command."
 			logger.critical( self.uid+" login failed - check account credentials" )
 			sys.exit(1)
 
