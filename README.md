@@ -33,3 +33,4 @@ You can install this from PyPI with one of the following commands (sudo is usual
 
 Configuration 
 -------------
+After installing AgileCLU, run "agileprofile" and put the output in /etc/agile/agile.conf.
