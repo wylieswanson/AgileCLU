@@ -38,12 +38,17 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 	basekey=epwbasekey(username,proto,hostname,basepath)
 	try:
 		b64decode=base64.b64decode(str)
-	except TypeError:
+	except TypeError, ValueError:
 		b64decode="12345678"
 	try:
-		dehash = pyDes.triple_des(basekey).decrypt(b64decode, padmode=2)
-	except TypeError:
+		if (len(b64decode) % 8 == 0):
+			dehash = pyDes.triple_des(basekey).decrypt(b64decode, padmode=2)
+		else:
+			print "Password is not valid. Was profile created with \"agileprofile\"?"
+			sys.exit(1)
+	except TypeError, ValueError:
 		dehash = "87654321"
+	if dehash is '': dehash='87654321' 
 	return dehash
 
 class	AgileCLU:
@@ -58,6 +63,12 @@ class	AgileCLU:
 			print "Profile (%s) configuration does not exist.  Exiting." % profile
 			# logger.critical( "configuration /etc/agile/"+profile+".conf does not exist" )
 			sys.exit(1)
+
+		# minor check to look for compliant configuration file
+		if not cfg.has_option("Egress","protocol"):
+			print "Profile was written for an earlier release of AgileCLU tools.  Please see README."
+			sys.exit(1)
+
 
 		self.uid = cfg.get("Identity", "username")
 
@@ -79,6 +90,10 @@ class	AgileCLU:
 			self.egress_protocol, 
 			self.egress_hostname, 
 			self.egress_basepath )
+
+		if upw is "87654321":
+			print "Password is not valid. Was profile created with \"agileprofile\"?"
+			sys.exit(1)
 
 		"""
 [Logging]
