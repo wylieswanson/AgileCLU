@@ -18,7 +18,7 @@ setup(
 	long_description=readme,
 	author="Wylie Swanson",
 	author_email="wylie@pingzero.net",
-	url="http://www.pingzero.net",
+	url = "http://pypi.python.org/pypi/AgileCLU",
 	download_url = "https://github.com/wylieswanson/AgileCLU/raw/master/dist/AgileCLU-0.3.2.tar.gz",
 
 	platforms = ("Any",),
