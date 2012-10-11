@@ -10,7 +10,7 @@ https://github.com/wylieswanson/AgileCLU
 
 Basic Installation
 ------------------
-If you already have Python and the [Python Package Index, or PyPI,](http://pypi.python.org/pypi/setuptools) installed on your machine, the installation of AgileCLU is simple and straightfoward.  Simply execute the following command (sudo is usually required on Linux):
+If you already have Python and [Python Package Index](http://pypi.python.org/pypi/setuptools) (PyPI) installed on your machine, the installation of AgileCLU is simple and straightfoward.  Simply execute one of the following commands (sudo is usually required on Linux):
 
 	easy_install AgileCLU
 
@@ -18,7 +18,7 @@ or,
 
 	pip install AgileCLU
 
-If one the above methods worked for you, you can skip the operating system specific installation notes and move on to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific section that follows.
+If the above method worked for you, you can skip the next operating system-specific installation notes and move on to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific section that follows.
 
 Installation:Linux
 ------------------
