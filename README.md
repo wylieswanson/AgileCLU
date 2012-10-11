@@ -1,20 +1,16 @@
 AgileCLU
 ========
-This library and script package is an implementation of command line tools and Python module 
-that can be used to write software against Limelight Networks' Agile Storage cloud platform.
-It leverages Agile Storage's JSON-RPC APIs to manage, ingest and egress objects from the 
-Agile Cloud.
+AgileCLU is a command line tool implementation and Python programming library for Limelight Networks Agile Storage cloud platform.  It leverages Agile's JSON-RPC APIs and HTTP ingest and egress capabilities in an easy to use way.  
 
 Communication
 -------------
-Feel free to send any questions, comments, or patches to my Github page (you'll need to join 
-to send a message): 
+Feel free to send any questions, comments, or patches to my Github page (you'll need to join to send a message): 
 https://github.com/wylieswanson/AgileCLU
 
 
-Installation:Linux
+Basic Installation
 ------------------
-You do not need to download the source code to install AgileCLU.  You can install this from PyPI with one of the following commands (sudo is usually required):
+If you already have Python and the [Python Package Index, or PyPI,](http://pypi.python.org/pypi/setuptools) installed on your machine, the installation of AgileCLU is simple and straightfoward.  If you do not have Python and easy_install on your machine yet, refer to the OS specific installation notes for the Python and PyPI installation methods.  Otherwise, you can simply issue the following command (sudo is usually required on Linux):
 
 	easy_install AgileCLU
 
@@ -22,9 +18,14 @@ or,
 
 	pip install AgileCLU
 
-If you don't have PyPI installed and you are running on Ubuntu or Debian, install it first.
+Installation:Linux
+------------------
+
+On most Linux distributions, Python is already installed, you only need to install PyPI.  For Debian, Ubuntu and other distributions using APT, install PyPI with the following:
 
 	sudo apt-get install python-pip
+
+If you are running another distribution, consult the [Python setuptools](http://pypi.python.org/pypi/setuptools) documentation.  After you complete this step, complete Basic Installation and move on to Configuration.
 
 Installation:Mac OSX
 --------------------
