@@ -7,6 +7,18 @@ Communication
 Feel free to send any questions, comments, or patches to my Github page (you'll need to join to send a message): 
 https://github.com/wylieswanson/AgileCLU
 
+Commands
+--------
+The commands that are currently available are:
+
+agilefetch - Automatically download a file from any URL and place it in your storage in a specified directory
+agilemkdir - Make a directory
+agilerm - Remove a file
+agilels - List a directory
+agilepost - Upload a file
+agileprofile - Generate a profile based on account credentials and ingest/egress information
+
+NOTE: For Windows, add a ".py" extension to the above commands.
 
 Basic Installation
 ------------------
@@ -51,7 +63,7 @@ Next, set the system's PATH variable to include directories that include Python 
 * In the search field, type 'system'
 * In the Control Panel section of the search results, select "Edit system environment variables"
 * Select "Environment Variables"
-* In the "System variables" section, scroll down to Path and click "Edit...", and then append ";\Python27;\Python27\Lib\site-packages;\Python27\Scripts;" to the "Variable Value", then select OK.
+* In the "System variables" section, scroll down to Path and click "Edit...", and then append ";C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;" to the "Variable Value", then select OK.
 
 
 * For 32-bit version of Python 
