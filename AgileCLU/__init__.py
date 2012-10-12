@@ -71,6 +71,7 @@ class	AgileCLU:
 	
 		self.apiurl = self.ingest_protocol + "://" + self.ingest_hostname + "/jsonrpc"
 		self.posturl = self.ingest_protocol + "://" + self.ingest_hostname + "/post/file"
+		self.postmultiurl = self.ingest_protocol + ":8080//" + self.ingest_hostname + "/multipart"
 
 		upw = e_pw_dehash( 
 			cfg.get("Identity", "password"), 
@@ -117,6 +118,10 @@ class	AgileCLU:
 		logger.info( self.uid+" "+self.token+", cacheurl="+self.cacheurl )
 		return self.cacheurl
 
+	def	postmultiurlstr(self):
+		logger.info( self.uid+" "+self.token+", postmultiurl="+self.postmultiurl )
+		return self.postmultiurl
+
 	def	tokenstr(self):
 		logger.info( self.uid+" "+self.token+", self.token" )
 		return self.token
@@ -146,6 +151,30 @@ class	AgileCLU:
 		r = self.api.listFile( self.token, path, pageSize, cookie, stat )
 		logger.info( self.uid+" "+self.token+", listFile "+path+" pageSize "+str(pageSize)+" cookie "+str(cookie)+" stat "+str(stat) )
 		# +" = "+str(r) )
+		return r
+
+	def	createMultipart(self, path):
+		r = self.api.createMultipart( self.token, path)
+		logger.info( self.uid+" "+self.token+", createMultipart "+path )
+		return r
+
+	def	createMultipartPiece(self, mpid='', number=0, size=0, checksum='', uri=''):
+		r = self.api.createMultipartPiece( self.token, mpid, number, size, checksum, uri )
+		logger.info( self.uid+" "+self.token+", createMultipartPiece mpid " + mpid + " number " + str(number) + " size " + str(size) + " checksum " + checksum + " uri " + uri )
+
+	def	completeMultipart( self, mpid='' ):
+		r = self.api.completeMultipart( self.token, mpid )
+		logger.info( self.uid+" "+self.token+", completeMultipart " + mpid )
+		return r
+
+	def	getMultipartStatus( self, mpid='' ):
+		r = self.api.getMultipartStatus( self.token, mpid )
+		logger.info( self.uid+" "+self.token+", getMultipartStatus " + mpid )
+		return r
+
+	def	listMultipartPiece( self, mpid='', lastpiece=0, pagesize=100 ):
+		r = self.api.listMultipartPiece( self.token, mpid, lastpiece, pagesize )
+		logger.info( self.uid+" "+self.token+", listMultipartPiece " + mpid + " lastpiece " +str(lastpiece)+ " pagesize "+ str(pagesize) )
 		return r
 
 	def	makeDir(self, path):
