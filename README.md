@@ -11,12 +11,13 @@ Commands
 --------
 The commands that are currently available are:
 
+agileprofile - Generate a profile based on account credentials and ingest/egress information
+
 agilefetch - Automatically download a file from any URL and place it in your storage in a specified directory
 agilemkdir - Make a directory
 agilerm - Remove a file
 agilels - List a directory
 agilepost - Upload a file
-agileprofile - Generate a profile based on account credentials and ingest/egress information
 
 NOTE: For Windows, add a ".py" extension to the above commands.
 
