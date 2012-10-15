@@ -20,8 +20,13 @@ or,
 
 If the above method worked for you, you can skip the next operating system-specific installation notes and move on to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific section that follows.
 
+## Upgrading ##
 
-## Commands ##
+If you are upgrading from a release prior to 0.3.1, you may need to manually delete the files from your Python installation (egg and easy-install.pth) prior to invoking easy_install or pip.  For future upgrades, can force to latest version with:
+
+	easy_install -U AgileCLU
+
+# AgileCLU from Command Line #
 
 The commands that are currently available are:
 
@@ -40,69 +45,8 @@ The commands that are currently available are:
 NOTE: For Windows, add a ".py" extension to the above commands.
 
 
-## Advanced Installation ##
 
-The advanced installation covers installing prerequisites, like Python and Python Setuptools.  Specific Python libraries will be installed automaticaly when you run easy_install.
-
-
-### Installation:Linux ###
-
-On most Linux distributions, Python is already installed, you only need to install PyPI.  For Debian, Ubuntu and other distributions using APT, install PyPI with the following:
-
-	sudo apt-get install python-pip
-
-If you are running another distribution, consult the [Python setuptools](http://pypi.python.org/pypi/setuptools) documentation.  After you complete this step, complete Basic Installation and move on to Configuration.
-
-
-### Installation:Mac OSX ###
-
-Python is already installed by default on modern OS X.
-
-### Installation:Windows 32-bit and 64-bit ### 
-
-The Windows 32-bit and 64-bit Installation section covers Windows environment variables, along with Python and Python Setuptools.
-
-#### Installation:Windows 32-bit and 64-bit:Python ####
-
-Python must be installed on the machine.  You can download from http://www.python.org/getit/ or, specifically, for Windows 32 and 64-bit:
-
-* Python 2.7.3 Windows Installer (Windows binary - does not include source)
-	* http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi
-
-* Python 2.7.3 Windows X86-64 Installer (Windows AMD64 / Intel 64 / X86-64 bainry - does not include source)
-	* http://www.python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi
-
-#### Installation:Windows 32-bit and 64-bit:Python ####
-
-Once Python has been installed, you will want to add setuptools, the mainstream package manager for Python, also known as PyPI.
-
-Next, set the system's PATH variable to include directories that include Python components and packages we'll add later.  To do this:
-
-* Click the bottom left Windows icon
-* In the search field, type 'system'
-* In the Control Panel section of the search results, select "Edit system environment variables"
-* Select "Environment Variables"
-* In the "System variables" section, scroll down to Path and click "Edit...", and then append ";C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;" to the "Variable Value", then select OK.
-
-#### Installation:Windows 32-bit and 64-bit:Python Setuptools ####
-
-* For 32-bit version of Python 
-	* Install setuptools using the provided .exe installer.
-		* http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe
-
-* For 64-bit versions of Python
-	* Download ez_setup.py and run it; it will download the appropriate .egg file and install it for you. (Currently, the provided .exe installer does not support 64-bit versions of Python for Windows, due to a distutils installer compatibility issue.
-		* http://peak.telecommunity.com/dist/ez_setup.py
-		* Run "ez_setup.py"
-
-## Upgrading ##
-
-If you are upgrading from a release prior to 0.3.1, you may need to manually delete the files from your Python installation (egg and easy-install.pth) prior to invoking easy_install or pip.  For future upgrades, can force to latest version with:
-
-	easy_install -U AgileCLU
-
-
-## Configuration ##
+# Configuration #
 
 After installing AgileCLU, run use the profile tool to generate the proper output to place in an /etc/agile/agile.conf configuration file.  You can create as many configuration profiles as you like, specifying to use them over the default agile.conf profile by specifying the -l option on any given command.
 
@@ -145,7 +89,63 @@ Example output:
 	level = info
 
 
-## Requirements ##
+# Advanced Installation #
+
+The advanced installation covers installing prerequisites, like Python and Python Setuptools.  Specific Python libraries will be installed automaticaly when you run easy_install.
+
+
+## Installation:Linux ##
+
+On most Linux distributions, Python is already installed, you only need to install PyPI.  For Debian, Ubuntu and other distributions using APT, install PyPI with the following:
+
+	sudo apt-get install python-pip
+
+If you are running another distribution, consult the [Python setuptools](http://pypi.python.org/pypi/setuptools) documentation.  After you complete this step, complete Basic Installation and move on to Configuration.
+
+
+## Installation:Mac OSX ##
+
+Python is already installed by default on modern OS X.
+
+## Installation:Windows 32-bit and 64-bit ##
+
+The Windows 32-bit and 64-bit Installation section covers Windows environment variables, along with Python and Python Setuptools.
+
+### Installation:Windows 32-bit and 64-bit:Python ###
+
+Python must be installed on the machine.  You can download from http://www.python.org/getit/ or, specifically, for Windows 32 and 64-bit:
+
+* Python 2.7.3 Windows Installer (Windows binary - does not include source)
+	* http://www.python.org/ftp/python/2.7.3/python-2.7.3.msi
+
+* Python 2.7.3 Windows X86-64 Installer (Windows AMD64 / Intel 64 / X86-64 bainry - does not include source)
+	* http://www.python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi
+
+### Installation:Windows 32-bit and 64-bit:Python ###
+
+Once Python has been installed, you will want to add setuptools, the mainstream package manager for Python, also known as PyPI.
+
+Next, set the system's PATH variable to include directories that include Python components and packages we'll add later.  To do this:
+
+* Click the bottom left Windows icon
+* In the search field, type 'system'
+* In the Control Panel section of the search results, select "Edit system environment variables"
+* Select "Environment Variables"
+* In the "System variables" section, scroll down to Path and click "Edit...", and then append ";C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;" to the "Variable Value", then select OK.
+
+### Installation:Windows 32-bit and 64-bit:Python Setuptools ###
+
+* For 32-bit version of Python 
+	* Install setuptools using the provided .exe installer.
+		* http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe
+
+* For 64-bit versions of Python
+	* Download ez_setup.py and run it; it will download the appropriate .egg file and install it for you. (Currently, the provided .exe installer does not support 64-bit versions of Python for Windows, due to a distutils installer compatibility issue.
+		* http://peak.telecommunity.com/dist/ez_setup.py
+		* Run "ez_setup.py"
+
+
+# Dependencies #
 
 This package has the following requirements:
 
@@ -156,7 +156,7 @@ This package has the following requirements:
 * jsonrpclib by John Marshall - an implementation of the JSON-RPC specification (https://github.com/joshmarshall/jsonrpclib)
 
 
-## Agile Storage Locations ##
+# Agile Storage Locations #
 
 As of October 2012, the Agile Storage Cloud has storage capacity in 34 geographies around the world.
 
