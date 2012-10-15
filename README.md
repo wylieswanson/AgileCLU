@@ -135,7 +135,7 @@ Next, set the system's PATH variable to include directories that include Python 
 * Select "Environment Variables"
 * In the "System variables" section, scroll down to Path and click "Edit...", and then append the below text to the "Variable Value" field, then select OK.
 
-	;C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;"
+> ;C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;
 
 At this point, you can return to the basic installation method (easy_install) at the top of this document.
 
