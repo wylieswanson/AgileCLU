@@ -40,7 +40,7 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.3.7"
+	__version__ = "0.3.8"
 
 	def     __init__(self, profile='agile'):
 
@@ -290,7 +290,8 @@ class	AgileCLU:
 		if (not os.path.isfile(source)): logger.info( "local("+source+") does not exist") ; return False 
 		if (not self.dexists(destination)): logger.info( "remote("+destination+") does not exist") ; return False
 
-		source_path = os.path.dirname(source) ; source_name = os.path.basename(source)
+		source_path = os.path.dirname(source) 
+		source_name = os.path.basename(source)
 	
 		poster.streaminghttp.register_openers()
 	
@@ -312,6 +313,25 @@ class	AgileCLU:
 		request = Request(self.posturl, datagen, headers)
 		request.add_header("X-Agile-Authorization", self.token)
 		request.add_header("X-Content-Type", mimetype )
+
+		success = False ; attempt = 0
+		while not success:
+			attempt += 1
+			try: 
+				result = urlopen(request).read() 
+				# if callback<>None: pbar.finish()
+				success = True
+			except HTTPError, e: 
+				# if callback<>None: pbar.finish()
+				print '[!] HTTP Error: ', e.code
+				pbar = None
+				success = False
+			except URLError, e: 
+				# if callback<>None: pbar.finish()
+				print '[!] URL Error: ', e.reason
+				pbar = None
+				success = False
+
 
 		try: result = urlopen(request).read()
 		except HTTPError, e: logger.info( 'HTTP Error: '+str(e.code) ) ; return False

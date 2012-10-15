@@ -35,7 +35,7 @@ def main(*arg):
 	group.add_option("-r", "--rename", dest="filename", help="rename destination file")
 	group.add_option("-c", "--mimetype", dest="mimetype", help="set MIME content-type")
 	group.add_option("-t", "--time", dest="mtime", help="set optional mtime")
-	group.add_option("-e", "--egress", dest="egress", help="set egress policy (PARTIAL, COMPLETE or POLICY)")
+	group.add_option("-e", "--egress", dest="egress", help="set egress policy (PARTIAL, COMPLETE or POLICY)", default="COMPLETE")
 	group.add_option("-m", "--mkdir", action="store_true", help="create destination path, if it does not exist")
 	group.add_option("-p", "--progress", action="store_true", help="show transfer progress bar")
 	parser.add_option_group(group)
@@ -81,54 +81,18 @@ def main(*arg):
 	if options.filename: fname = options.filename
 	else: fname = localfile
 
-	register_openers()
-
-	# video/mpeg for m2ts
-	if options.progress: 
-		datagen, headers = multipart_encode( { 
-			"uploadFile": open(object, "rb"), 
-			"directory": path, 
-			"basename": fname, 
-			"expose_egress": "COMPLETE"
-			}, cb=progress_callback)
-	else: 
-		datagen, headers = multipart_encode( { 
-			"uploadFile": open(object, "rb"), 
-			"directory": path, 
-			"basename": fname, 
-			"expose_egress": "COMPLETE"
-			} )
-
-	request = Request(agile.posturl, datagen, headers)
-	request.add_header("X-Agile-Authorization", agile.token)
-
 	if options.mimetype: mimetype = options.mimetype
 	else: mimetype = 'auto'
 
-	request.add_header("X-Content-Type", mimetype )
+	if options.progress:
+		result = agile.post(localpath+localfile, path, fname, mimetype, None, options.egress, False, progress_callback)
+		print "\n"
+	else:
+		result = agile.post(localpath+localfile, path, fname, mimetype, None, options.egress, False, None)
 
-	success = False ; attempt = 0
-	while not success:
-		attempt += 1
-		try: 
-			result = urlopen(request).read() 
-			if options.progress: pbar.finish()
-			success = True
-		except HTTPError, e: 
-			if options.progress: pbar.finish()
-			print '[!] HTTP Error: ', e.code
-			pbar = None
-			success = False
-		except URLError, e: 
-			if options.progress: pbar.finish()
-			print '[!] URL Error: ', e.reason
-			pbar = None
-			success = False
-
-	
 	if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
 
-        agile.logout()
+	agile.logout()
 
 if __name__ == '__main__':
     main()
