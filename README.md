@@ -40,7 +40,9 @@ The commands that are currently available are:
 NOTE: For Windows, add a ".py" extension to the above commands.
 
 
-## Advanced Installatioa ##
+## Advanced Installation ##
+
+The advanced installation covers installing prerequisites, like Python and Python Setuptools.  Specific Python libraries will be installed automaticaly when you run easy_install.
 
 
 ### Installation:Linux ###
@@ -56,7 +58,11 @@ If you are running another distribution, consult the [Python setuptools](http://
 
 Python is already installed by default on modern OS X.
 
-### Installation:Windows 32-bit and 64-bit ###
+### Installation:Windows 32-bit and 64-bit ### 
+
+The Windows 32-bit and 64-bit Installation section covers Windows environment variables, along with Python and Python Setuptools.
+
+#### Installation:Windows 32-bit and 64-bit:Python ####
 
 Python must be installed on the machine.  You can download from http://www.python.org/getit/ or, specifically, for Windows 32 and 64-bit:
 
