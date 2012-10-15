@@ -7,6 +7,18 @@ Communication
 Feel free to send any questions, comments, or patches to my Github page (you'll need to join to send a message): 
 https://github.com/wylieswanson/AgileCLU
 
+Basic Installation
+------------------
+If you already have Python and [Python Package Index](http://pypi.python.org/pypi/setuptools) (PyPI) installed on your machine, the installation of AgileCLU is simple and straightfoward.  Simply execute one of the following commands (sudo is usually required on Linux):
+
+	easy_install AgileCLU
+
+or,
+
+	pip install AgileCLU
+
+If the above method worked for you, you can skip the next operating system-specific installation notes and move on to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific section that follows.
+
 Commands
 --------
 The commands that are currently available are:
@@ -24,18 +36,6 @@ The commands that are currently available are:
 *agilepost* - Upload a file
 
 NOTE: For Windows, add a ".py" extension to the above commands.
-
-Basic Installation
-------------------
-If you already have Python and [Python Package Index](http://pypi.python.org/pypi/setuptools) (PyPI) installed on your machine, the installation of AgileCLU is simple and straightfoward.  Simply execute one of the following commands (sudo is usually required on Linux):
-
-	easy_install AgileCLU
-
-or,
-
-	pip install AgileCLU
-
-If the above method worked for you, you can skip the next operating system-specific installation notes and move on to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific section that follows.
 
 Installation:Linux
 ------------------
