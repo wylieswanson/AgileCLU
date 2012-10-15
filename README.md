@@ -133,23 +133,27 @@ Next, set the system's PATH variable to include directories that include Python 
 * In the search field, type 'system'
 * In the Control Panel section of the search results, select "Edit system environment variables"
 * Select "Environment Variables"
-* In the "System variables" section, scroll down to Path and click "Edit...", and then append ";C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;" to the "Variable Value", then select OK.
+* In the "System variables" section, scroll down to Path and click "Edit...", and then append the below text to the "Variable Value" field, then select OK.
+
+	;C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;"
+
+At this point, you can return to the basic installation method (easy_install) at the top of this document.
 
 ### Windows Python Setuptools ###
 
-* For 32-bit version of Python 
+* For 32-bit Windows
 	* Install setuptools using the provided .exe installer.
 		* http://pypi.python.org/packages/2.7/s/setuptools/setuptools-0.6c11.win32-py2.7.exe
 
-* For 64-bit versions of Python
+* For 64-bit Windows
 	* Download ez_setup.py and run it; it will download the appropriate .egg file and install it for you. (Currently, the provided .exe installer does not support 64-bit versions of Python for Windows, due to a distutils installer compatibility issue.
 		* http://peak.telecommunity.com/dist/ez_setup.py
 		* Run "ez_setup.py"
 
 
-# Python Libraries Used by AgileCLU #
+# Libraries used by AgileCLU #
 
-This package has the following requirements:
+This package leverages the following Python libraries:
 
 * poster by Chris AtLee - used for streaming ingest (http://atlee.ca/software/poster/)
 * progressbar by Nilton Volpato - used for console ingest progress bar (http://code.google.com/p/python-progressbar/)
