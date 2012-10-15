@@ -1,6 +1,8 @@
 # AgileCLU #
 
-AgileCLU is a command line tool implementation and Python programming library for Limelight Networks Agile Storage cloud platform.  It leverages Agile's JSON-RPC APIs and HTTP ingest and egress capabilities in an easy to use way.  
+AgileCLU is a command line tool implementation and Python programming library for Limelight Networks Agile Storage cloud platform.  It leverages Agile's JSON-RPC APIs and HTTP ingest and egress capabilities in an easy to use way.  To use these tools, you must have:
+
+* An account on Limelight Network's Agile Storage cloud platform. (http://www.limelightnetworks.com)
 
 
 ## Communication ##
@@ -111,7 +113,7 @@ Python is already installed by default on modern OS X.
 
 The Windows 32-bit and 64-bit Installation section covers Windows environment variables, along with Python and Python Setuptools.
 
-### Installation:Windows 32-bit and 64-bit:Python ###
+### Windows Python ###
 
 Python must be installed on the machine.  You can download from http://www.python.org/getit/ or, specifically, for Windows 32 and 64-bit:
 
@@ -121,7 +123,7 @@ Python must be installed on the machine.  You can download from http://www.pytho
 * Python 2.7.3 Windows X86-64 Installer (Windows AMD64 / Intel 64 / X86-64 bainry - does not include source)
 	* http://www.python.org/ftp/python/2.7.3/python-2.7.3.amd64.msi
 
-### Installation:Windows 32-bit and 64-bit:Python ###
+### Windows Environment Variables ###
 
 Once Python has been installed, you will want to add setuptools, the mainstream package manager for Python, also known as PyPI.
 
@@ -133,7 +135,7 @@ Next, set the system's PATH variable to include directories that include Python 
 * Select "Environment Variables"
 * In the "System variables" section, scroll down to Path and click "Edit...", and then append ";C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;" to the "Variable Value", then select OK.
 
-### Installation:Windows 32-bit and 64-bit:Python Setuptools ###
+### Windows Python Setuptools ###
 
 * For 32-bit version of Python 
 	* Install setuptools using the provided .exe installer.
@@ -145,11 +147,10 @@ Next, set the system's PATH variable to include directories that include Python 
 		* Run "ez_setup.py"
 
 
-# Dependencies #
+# Python Libraries Used by AgileCLU #
 
 This package has the following requirements:
 
-* An account on Limelight Network's Agile Storage cloud platform. (http://www.limelightnetworks.com)
 * poster by Chris AtLee - used for streaming ingest (http://atlee.ca/software/poster/)
 * progressbar by Nilton Volpato - used for console ingest progress bar (http://code.google.com/p/python-progressbar/)
 * pydes by Todd Whiteman - used as part of the password encryption scheme for config files (http://twhiteman.netfirms.com/des.html)
