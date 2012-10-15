@@ -3,7 +3,7 @@ import ConfigParser, sys, os.path, logging
 import poster 
 import pyDes, md5, hashlib, base64
 from urllib2 import Request, urlopen, URLError, HTTPError
-
+import progressbar
 
 logger = logging.getLogger('AgileCLU')
 logger.addHandler(logging.NullHandler())
@@ -72,6 +72,9 @@ class	AgileCLU:
 		self.apiurl = self.ingest_protocol + "://" + self.ingest_hostname + "/jsonrpc"
 		self.posturl = self.ingest_protocol + "://" + self.ingest_hostname + "/post/file"
 		self.postmultiurl = self.ingest_protocol + ":8080//" + self.ingest_hostname + "/multipart"
+
+		self.pbar = None
+		self.pbarfname = None
 
 		upw = e_pw_dehash( 
 			cfg.get("Identity", "password"), 
@@ -285,32 +288,36 @@ class	AgileCLU:
 		else:
 			return False
 
-	def	post(self, source, destination, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None):
-		logger.info( self.uid+" "+self.token+", post "+source+" "+destination+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
-		if (not os.path.isfile(source)): logger.info( "local("+source+") does not exist") ; return False 
-		if (not self.dexists(destination)): logger.info( "remote("+destination+") does not exist") ; return False
+	def	pbar_callback(self, param, current, total):
+		if (self.pbar==None):
+			widgets = [ unicode(self.pbarfname, errors='ignore').encode('utf-8'), ' ', progressbar.FileTransferSpeed(), ' [', progressbar.Bar(), '] ', progressbar.Percentage(), ' ', progressbar.ETA() ]
+			self.pbar = progressbar.ProgressBar( widgets=widgets, maxval=total ).start()
+		try:
+			self.pbar.update(current)
+		except AssertionError, e:
+			print e
+			print "!"
 
-		source_path = os.path.dirname(source) 
-		source_name = os.path.basename(source)
+	def	post(self, sourceObject, targetPath, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None):
+		logger.info( self.uid+" "+self.token+", post "+sourceObject+" "+targetPath+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
+		if (not os.path.isfile(sourceObject)): logger.info( "local("+sourceObject+") does not exist") ; return False 
+		if (not self.dexists(targetPath)): logger.info( "remote("+targetPath+") does not exist") ; return False
+
+		sourcePath = os.path.dirname(sourceObject) 
+		sourceName = os.path.basename(sourceObject)
+		self.pbarfname = sourceName
 	
 		poster.streaminghttp.register_openers()
 	
-		if callback<>None:
-			datagen, headers = poster.encode.multipart_encode( {
-				"uploadFile": open(source, "rb"),
-				"directory": destination,
-				"basename": source_name,
-				"expose_egress": egress_policy
-				}, cb=callback)
-		else:
-			datagen, headers = poster.encode.multipart_encode( {
-				"uploadFile": open(source, "rb"),
-				"directory": destination,
-				"basename": source_name,
-				"expose_egress": egress_policy
-				} )
+		datagen, headers = poster.encode.multipart_encode( {
+			"uploadFile": open( os.path.join(sourcePath,sourceName), "rb"),
+			"directory": targetPath,
+			"basename": sourceName,
+			"expose_egress": egress_policy
+			}, cb=callback)
 
 		request = Request(self.posturl, datagen, headers)
+
 		request.add_header("X-Agile-Authorization", self.token)
 		request.add_header("X-Content-Type", mimetype )
 
@@ -319,24 +326,16 @@ class	AgileCLU:
 			attempt += 1
 			try: 
 				result = urlopen(request).read() 
-				# if callback<>None: pbar.finish()
+				if callback<>None: self.pbar.finish()
+				self.pbar = None
 				success = True
 			except HTTPError, e: 
-				# if callback<>None: pbar.finish()
+				if callback<>None: self.pbar.finish()
 				print '[!] HTTP Error: ', e.code
-				pbar = None
+				self.pbar = None
 				success = False
 			except URLError, e: 
-				# if callback<>None: pbar.finish()
+				if callback<>None: self.pbar.finish()
 				print '[!] URL Error: ', e.reason
-				pbar = None
+				self.pbar = None
 				success = False
-
-
-		try: result = urlopen(request).read()
-		except HTTPError, e: logger.info( 'HTTP Error: '+str(e.code) ) ; return False
-		except URLError, e: logger.info( 'URL Error: '+str(e.reason) ) ; return False
-
-		return True
-
-# End of agile.py

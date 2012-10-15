@@ -7,24 +7,10 @@ import sys, os.path, urllib, subprocess, time
 from poster.encode import multipart_encode, get_body_size
 from poster.streaminghttp import register_openers
 from urllib2 import Request, urlopen, URLError, HTTPError
-import progressbar 
-
-pbar = None
-fname = None
-
-def progress_callback(param, current, total):
-	global pbar
-	if (pbar==None):
-		widgets = [ unicode(fname, errors='ignore').encode('utf-8'), ' ', progressbar.FileTransferSpeed(), ' [', progressbar.Bar(), '] ', progressbar.Percentage(), ' ', progressbar.ETA() ]
-		pbar = progressbar.ProgressBar(widgets=widgets, maxval=total).start()
-	try:
-		pbar.update(current)
-	except AssertionError, e:
-		print e
 
 def main(*arg):
 
-	global fname, pbar
+	global fname
 	# parse command line and associated helper
 
 	parser = OptionParser( usage= "usage: %prog [options] object path", version="%prog (AgileCLU "+AgileCLU.__version__+")")
@@ -54,7 +40,7 @@ def main(*arg):
 	path = args[1]
 	
 	if (not os.path.isfile(object)):
-		print "Local file object (%s) does not exist. Exiting." % localfile
+		print "Local file object (%s) does not exist. Exiting." % object
 		sys.exit(1)
 
 	if options.username: agile = AgileCLU( options.username )
@@ -84,13 +70,13 @@ def main(*arg):
 	if options.mimetype: mimetype = options.mimetype
 	else: mimetype = 'auto'
 
-	if options.progress:
-		result = agile.post(localpath+localfile, path, fname, mimetype, None, options.egress, False, progress_callback)
-		print "\n"
-	else:
-		result = agile.post(localpath+localfile, path, fname, mimetype, None, options.egress, False, None)
+	if options.progress: callback = agile.pbar_callback
+	else: callback = None
 
-	if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
+	result = agile.post( os.path.join(localpath,localfile), path, fname, mimetype, None, options.egress, False, callback )
+
+	if result:
+		if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
 
 	agile.logout()
 
