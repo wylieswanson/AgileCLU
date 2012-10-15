@@ -27,6 +27,18 @@ def main(*arg):
 	group.add_option("-d", "--dirhide", action="store_true", help="hide directory objects")
 	parser.add_option_group(group)
 
+	""" Placeholder for using command line for profile information 
+	profile = OptionGroup(parser, "Profile options")
+	profile.add_option("--username", dest="username", help="Agile username")
+	profile.add_option("--password", dest="password", help="Agile password")
+	profile.add_option("--iprotocol", dest="ingest_protocol", help="Agile ingest protocol", default="https")
+	profile.add_option("--ihostname", dest="ingest_hostname", help="Agile ingest hostname", default="api.agile.lldns.net")
+	profile.add_option("--eprotocol", dest="egress_protocol", help="Agile egress protocol", default="http")
+	profile.add_option("--ehostname", dest="egress_hostname", help="Agile egress hostname", default="global.mt.lldns.net")
+	profile.add_option("--ebase", dest="egress_basepath", help="Agile egress base path" )
+	parser.add_option_group(profile)
+	"""
+
 	(options, args) = parser.parse_args()
 	if len(args) != 1: parser.error("Wrong number of arguments. Exiting.")
 	path = args[0]
