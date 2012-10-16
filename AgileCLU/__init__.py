@@ -5,8 +5,12 @@ import pyDes, md5, hashlib, base64
 from urllib2 import Request, urlopen, URLError, HTTPError
 import progressbar
 
+class NullHandler(logging.Handler):
+    def emit(self, record):
+        pass
+
 logger = logging.getLogger('AgileCLU')
-logger.addHandler(logging.NullHandler())
+logger.addHandler(NullHandler())
 cfg = ConfigParser.ConfigParser() 
 
 def epwbasekey( username, proto, hostname, basepath ):
@@ -40,7 +44,7 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.3.10"
+	__version__ = "0.3.11"
 
 	def     __init__(self, profile='agile'):
 
