@@ -1,7 +1,7 @@
 import jsonrpclib
 import ConfigParser, sys, os.path, logging
 import poster 
-import pyDes, md5, hashlib, base64
+import pyDes, hashlib, base64
 from urllib2 import Request, urlopen, URLError, HTTPError
 import progressbar
 
@@ -14,7 +14,7 @@ logger.addHandler(NullHandler())
 cfg = ConfigParser.ConfigParser() 
 
 def epwbasekey( username, proto, hostname, basepath ):
-   m = md5.new()
+   m = hashlib.md5()
    m.update( username )
    m.update( proto )
    m.update( hostname )
@@ -44,7 +44,7 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.3.11"
+	__version__ = "0.3.12"
 
 	def     __init__(self, profile='agile'):
 
