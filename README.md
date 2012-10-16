@@ -20,7 +20,7 @@ or,
 
 	pip install AgileCLU
 
-If the above method worked for you, you can skip the next operating system-specific installation notes and move on to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific section that follows.
+If the above method worked for you, you can skip the operating system-specific installation sections and move to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific sections in the Advanced Configuration sections.
 
 ## Upgrading ##
 
@@ -28,29 +28,9 @@ If you are upgrading from a release prior to 0.3.1, you may need to manually del
 
 	easy_install -U AgileCLU
 
-# AgileCLU from Command Line #
-
-The commands that are currently available are:
-
-*agileprofile* - Generate a profile based on account credentials and ingest/egress information
-
-*agilefetch* - Automatically download a file from any URL and place it in your storage in a specified directory
-
-*agilemkdir* - Make a directory
-
-*agilerm* - Remove a file
-
-*agilels* - List a directory
-
-*agilepost* - Upload a file
-
-NOTE: For Windows, add a ".py" extension to the above commands.
-
-
-
 # Configuration #
 
-After installing AgileCLU, run use the profile tool to generate the proper output to place in an /etc/agile/agile.conf configuration file.  You can create as many configuration profiles as you like, specifying to use them over the default agile.conf profile by specifying the -l option on any given command.
+After installing AgileCLU, run use the profile tool to generate the proper output to place in an /etc/agile/agile.conf configuration file.  You can create as many configuration profiles as you like, specifying to use them over the default agile.conf profile by specifying the -l option on any given command.  If you are using Windows, you need to include the .py extension, substituting agileprofile with agileprofile.py.
 
 	agileprofile
 
@@ -91,9 +71,31 @@ Example output:
 	level = info
 
 
+# AgileCLU from Command Line #
+
+The commands that are currently available are:
+
+*agileprofile* - Generate a profile based on account credentials and ingest/egress information
+
+*agilefetch* - Automatically download a file from any URL and place it in your storage in a specified directory
+
+*agilemkdir* - Make a directory
+
+*agilerm* - Remove a file
+
+*agilels* - List a directory
+
+*agilepost* - Upload a file
+
+NOTE: For Windows, add a ".py" extension to the above commands.
+
+
+
+
+
 # Advanced Installation #
 
-The advanced installation covers installing prerequisites, like Python and Python Setuptools.  Specific Python libraries will be installed automaticaly when you run easy_install.
+The advanced installation covers installing prerequisites, like Python and Python Setuptools.  Specific Python libraries will be installed automaticaly when you run easy_install.  If you already have Python and Easysetup installed, you do not need to use the following directions.
 
 
 ## Installation:Linux ##
@@ -137,7 +139,6 @@ Next, set the system's PATH variable to include directories that include Python 
 
 > ;C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;
 
-At this point, you can return to the basic installation method (easy_install) at the top of this document.
 
 ### Windows Python Setuptools ###
 
@@ -149,6 +150,8 @@ At this point, you can return to the basic installation method (easy_install) at
 	* Download ez_setup.py and run it; it will download the appropriate .egg file and install it for you. (Currently, the provided .exe installer does not support 64-bit versions of Python for Windows, due to a distutils installer compatibility issue.
 		* http://peak.telecommunity.com/dist/ez_setup.py
 		* Run "ez_setup.py"
+
+At this point, you can return to the basic installation method (easy_install) at the top of this document.  Note that you will need to place the output of agileprofile in C:\etc\agile\agile.conf, or alternate profiles C:\etc\agile\profileconf (to be used by the -l command line option).
 
 
 # Libraries used by AgileCLU #
