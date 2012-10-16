@@ -51,7 +51,7 @@
 <pre><code>pip install AgileCLU
 </code></pre>
 
-<p>If the above method worked for you, you can skip the next operating system-specific installation notes and move on to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific section that follows.</p>
+<p>If the above method worked for you, you can skip the operating system-specific installation sections and move to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific sections in the Advanced Configuration sections.</p>
 
 <h2>Upgrading</h2>
 
@@ -60,27 +60,9 @@
 <pre><code>easy_install -U AgileCLU
 </code></pre>
 
-<h1>AgileCLU from Command Line</h1>
-
-<p>The commands that are currently available are:</p>
-
-<p><em>agileprofile</em> - Generate a profile based on account credentials and ingest/egress information</p>
-
-<p><em>agilefetch</em> - Automatically download a file from any URL and place it in your storage in a specified directory</p>
-
-<p><em>agilemkdir</em> - Make a directory</p>
-
-<p><em>agilerm</em> - Remove a file</p>
-
-<p><em>agilels</em> - List a directory</p>
-
-<p><em>agilepost</em> - Upload a file</p>
-
-<p>NOTE: For Windows, add a ".py" extension to the above commands.</p>
-
 <h1>Configuration</h1>
 
-<p>After installing AgileCLU, run use the profile tool to generate the proper output to place in an /etc/agile/agile.conf configuration file.  You can create as many configuration profiles as you like, specifying to use them over the default agile.conf profile by specifying the -l option on any given command.</p>
+<p>After installing AgileCLU, run use the profile tool to generate the proper output to place in an /etc/agile/agile.conf configuration file.  You can create as many configuration profiles as you like, specifying to use them over the default agile.conf profile by specifying the -l option on any given command.  If you are using Windows, you need to include the .py extension, substituting agileprofile with agileprofile.py.</p>
 
 <pre><code>agileprofile
 </code></pre>
@@ -122,9 +104,27 @@ logfile = /var/log/agileclu.log
 level = info
 </code></pre>
 
+<h1>AgileCLU from Command Line</h1>
+
+<p>The commands that are currently available are:</p>
+
+<p><em>agileprofile</em> - Generate a profile based on account credentials and ingest/egress information</p>
+
+<p><em>agilefetch</em> - Automatically download a file from any URL and place it in your storage in a specified directory</p>
+
+<p><em>agilemkdir</em> - Make a directory</p>
+
+<p><em>agilerm</em> - Remove a file</p>
+
+<p><em>agilels</em> - List a directory</p>
+
+<p><em>agilepost</em> - Upload a file</p>
+
+<p>NOTE: For Windows, add a ".py" extension to the above commands.</p>
+
 <h1>Advanced Installation</h1>
 
-<p>The advanced installation covers installing prerequisites, like Python and Python Setuptools.  Specific Python libraries will be installed automaticaly when you run easy_install.</p>
+<p>The advanced installation covers installing prerequisites, like Python and Python Setuptools.  Specific Python libraries will be installed automaticaly when you run easy_install.  If you already have Python and Easysetup installed, you do not need to use the following directions.</p>
 
 <h2>Installation:Linux</h2>
 
@@ -178,8 +178,6 @@ level = info
 <p>;C:\Python27;C:\Python27\Lib\site-packages;C:\Python27\Scripts;</p>
 </blockquote>
 
-<p>At this point, you can return to the basic installation method (easy_install) at the top of this document.</p>
-
 <h3>Windows Python Setuptools</h3>
 
 <ul>
@@ -208,7 +206,9 @@ level = info
 </li>
 </ul>
 </li>
-</ul><h1>Libraries used by AgileCLU</h1>
+</ul><p>At this point, you can return to the basic installation method (easy_install) at the top of this document.  Note that you will need to place the output of agileprofile in C:\etc\agile\agile.conf, or alternate profiles C:\etc\agile\profileconf (to be used by the -l command line option).</p>
+
+<h1>Libraries used by AgileCLU</h1>
 
 <p>This package leverages the following Python libraries:</p>
 
