@@ -7,7 +7,7 @@ readme = open(os.path.join(here,"README.md")).read()
 
 setup(  
 	name="AgileCLU",
-	version="0.4.0",
+	version="0.4.1",
    install_requires=['poster','progressbar','pydes','jsonrpclib'],
 	packages=['AgileCLU'],
 	package_data={'': ['LICENSE','README.md']},
@@ -19,7 +19,7 @@ setup(
 	author="Wylie Swanson",
 	author_email="wylie@pingzero.net",
 	url = "http://pypi.python.org/pypi/AgileCLU",
-	download_url = "https://github.com/wylieswanson/AgileCLU/raw/master/dist/AgileCLU-0.4.0.tar.gz",
+	download_url = "https://github.com/wylieswanson/AgileCLU/raw/master/dist/AgileCLU-0.4.1.tar.gz",
 
 	platforms = ("Any",),
 	keywords = ("agile", "storage", "limelight", "cloud", "object" ),

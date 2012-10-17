@@ -40,8 +40,11 @@ def main(*arg):
 	"""
 
 	(options, args) = parser.parse_args()
-	if len(args) != 1: parser.error("Wrong number of arguments. Exiting.")
-	path = args[0]
+	if len(args) != 1 and len(args) != 0: parser.error("Wrong number of arguments. Exiting.")
+	if len(args) == 0: 
+		path = '/'
+	else: 
+		path = args[0]
 
 	if options.username: agile = AgileCLU( options.username )
 	else: agile = AgileCLU()
