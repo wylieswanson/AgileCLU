@@ -4,14 +4,23 @@ AgileCLU is a command line tool implementation and Python programming library fo
 
 * An account on Limelight Network's Agile Storage cloud platform. (http://www.limelightnetworks.com)
 
+## Agile Storage Locations ##
+
+As of October 2012, the Agile Storage Cloud has storage capacity in 34 geographies around the world.
+
+![Agile Storage Locations](https://raw.github.com/wylieswanson/AgileCLU/master/agile_locations_oct_2012.jpg)
 
 ## Communication ##
 
-Feel free to send any questions, comments, or patches to my Github page (you'll need to join to send a message): 
-https://github.com/wylieswanson/AgileCLU
+Feel free to send any questions, comments, or patches using the AgileCLU Development at Github page (you'll need to join to send a message): 
 
+* [AgileCLU Release Documentation](http:/wylieswanson.github.com/AgileCLU)
 
-## Basic Installation ##
+* [AgileCLU Development at GitHub](https://github.com/wylieswanson/AgileCLU)
+
+* [AgileCLU at Python Package Index](http://pypi.python.org/pypi/AgileCLU)
+
+# Basic Installation #
 If you already have Python and [Python Package Index](http://pypi.python.org/pypi/setuptools) (PyPI) installed on your machine, the installation of AgileCLU is simple and straightfoward.  Simply execute one of the following commands (sudo is usually required on Linux):
 
 	easy_install AgileCLU
@@ -22,7 +31,7 @@ or,
 
 If the above method worked for you, you can skip the operating system-specific installation sections and move to Configuration, as you have now completed the installation of AgileCLU.  If not, consult the relevant operating system-specific sections in the Advanced Configuration sections.
 
-## Upgrading ##
+# Upgrading #
 
 If you are upgrading from a release prior to 0.3.1, you may need to manually delete the files from your Python installation (egg and easy-install.pth) prior to invoking easy_install or pip.  For future upgrades, can force to latest version with:
 
@@ -67,9 +76,6 @@ The commands that are currently available are:
 *agilepost* - Upload a file
 
 NOTE: For Windows, add a ".py" extension to the above commands.
-
-
-
 
 
 # Advanced Installation #
@@ -143,8 +149,3 @@ This package leverages the following Python libraries:
 * jsonrpclib by John Marshall - an implementation of the JSON-RPC specification (https://github.com/joshmarshall/jsonrpclib)
 
 
-# Agile Storage Locations #
-
-As of October 2012, the Agile Storage Cloud has storage capacity in 34 geographies around the world.
-
-![Agile Storage Locations](https://raw.github.com/wylieswanson/AgileCLU/master/agile_locations_oct_2012.jpg)
