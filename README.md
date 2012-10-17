@@ -1,6 +1,6 @@
 # AgileCLU #
 
-AgileCLU is a command line tool implementation and Python programming library for Limelight Networks Agile Storage cloud platform.  It leverages Agile's JSON-RPC APIs and HTTP ingest and egress capabilities in an easy to use way.  To use these tools, you must have:
+AgileCLU is a command line tool implementation and Python programming library for Limelight Networks Agile Storage cloud platform.  Release documentation is posted at http://wylieswanson.github.com/AgileCLU/.  The tools and library leverage Agile's JSON-RPC APIs and HTTP ingest and egress capabilities in an easy to use way.  To use these tools, you must have:
 
 * An account on Limelight Network's Agile Storage cloud platform. (http://www.limelightnetworks.com)
 
@@ -30,46 +30,25 @@ If you are upgrading from a release prior to 0.3.1, you may need to manually del
 
 # Configuration #
 
-After installing AgileCLU, run use the profile tool to generate the proper output to place in an /etc/agile/agile.conf configuration file.  You can create as many configuration profiles as you like, specifying to use them over the default agile.conf profile by specifying the -l option on any given command.  If you are using Windows, you need to include the .py extension, substituting agileprofile with agileprofile.py.
+Since AgileCLU 0.4.0 the configuration of profiles has been greatly simplified.  Configuration profiles are stored in ~/.agileclu (off of active user accounts home directory).  After installing AgileCLU, use 'agileprofile create' to configure a default account.  You can create as many configuration profiles as you like, with 'agileprofile create profilename'.  To use different profiles from the command line tools, specify the -l option for any given command.  If you are using Windows, you need to include the .py extension, substituting agileprofile with agileprofile.py.
 
-	agileprofile
+	agileprofile create
 
 Example output:
 
-	agileprofile (AgileCLU 0.3.6)
-	
-	This tool generates Agile Storage profile text to be pasted into AgileCLU profile configuration
-	files (eg. /etc/agile/agile.conf is the default).  The information should have been provided to
-	you by Limelight Networks, often via a "welcome letter".  If you have questions regarding the
-	account information, please contact support@llnw.com.
-	
-	Enter Agile username: testcompany
-	Enter Agile password: 
-	Re-enter Agile password: 
-	Enter your egress hostname: global.mt.lldns.net
-	Enter your egress base path: /testcompany
-	Enter your ingest hostname: api.agile.lldns.net
-	
-	PASTE THE FOLLOWING IN YOUR PROFILE CONFIGURATION FILE 
-	
-	[Identity]
-	username = testcompany
-	password = A4UsWnRpKOdNy0HNWDHY+Q==
-	
-	[Egress]
-	protocol = http
-	hostname = global.mt.lldns.net
-	basepath = /testcompany
-	
-	[Ingest]
-	protocol = https
-	hostname = api.agile.lldns.net
-	
-	[Logging]
-	enabled = no
-	logfile = /var/log/agileclu.log
-	level = info
+	agileprofile.py (AgileCLU 0.4.0)
 
+	CREATE PROFILE: test
+	                                          Username : testcompany
+	                                          Password : 
+	                                 Re-enter password : 
+	                            Egress protocol [http] : 
+	             Egress hostname [global.mt.lldns.net] : 
+	                                  Egress base path : /testcompany
+	                           Ingest protocol [https] : 
+	                                   Ingest hostname : test-company.api.agile.lldns.net
+	
+	Profile (test) has been saved.  Exiting.
 
 # AgileCLU from Command Line #
 
