@@ -45,6 +45,10 @@ def	prompt( str, default, command, password=False ):
 
 def	edit_profile( profile, command ):
 	width = 50
+	if command=='modify':
+		if not os.path.isfile( os.path.join( config_path, profile+'.conf' ) ):
+			print "Profile (%s) does not exist.  Try 'agileprofile create' first.  Exiting." % (profile)
+			sys.exit(1)
 
 	if command=='create':
 		if os.path.isfile( os.path.join( config_path, profile+'.conf' ) ):
