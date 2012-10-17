@@ -13,19 +13,20 @@ logger = logging.getLogger('AgileCLU')
 logger.addHandler(NullHandler())
 cfg = ConfigParser.ConfigParser() 
 
-def epwbasekey( username, proto, hostname, basepath ):
-   m = hashlib.md5()
-   m.update( username )
-   m.update( proto )
-   m.update( hostname )
-   m.update( basepath )
-   key = base64.b64encode(hashlib.sha256( m.digest() ).digest())
-   return key[0:24]
+def	epwbasekey( username, proto, hostname, basepath ):
+	m = hashlib.md5()
+	m.update( username )
+	m.update( proto )
+	m.update( hostname )
+	m.update( basepath )
+	key = base64.b64encode(hashlib.sha256( m.digest() ).digest())
+	return key[0:24]
 
-def e_pw_hash( str, username, proto, hostname, basepath ):
-   return base64.b64encode(pyDes.triple_des(epwbasekey(username,proto,hostname,basepath)).encrypt(str, padmode=2))
+def	e_pw_hash( str, username, proto, hostname, basepath ):
+	hash = base64.b64encode(pyDes.triple_des(epwbasekey(username,proto,hostname,basepath)).encrypt(str, padmode=2))
+	return hash
 
-def e_pw_dehash( str, username, proto, hostname, basepath ):
+def	e_pw_dehash( str, username, proto, hostname, basepath ):
 	basekey=epwbasekey(username,proto,hostname,basepath)
 	try:
 		b64decode=base64.b64decode(str)
@@ -35,7 +36,7 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 		if (len(b64decode) % 8 == 0):
 			dehash = pyDes.triple_des(basekey).decrypt(b64decode, padmode=2)
 		else:
-			print "Password is not valid. Verify profile was built with \"agileprofile\" command."
+			print "Password corruption - not Base-64 compliant.  Delete the profile and create a new one."
 			sys.exit(1)
 	except TypeError, ValueError:
 		dehash = "87654321"
@@ -44,23 +45,20 @@ def e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.3.12"
+	__version__ = "0.4.0"
 
-	def     __init__(self, profile='agile'):
+	def     __init__(self, profile='default'):
+		config_path = os.path.expanduser( '~/.agileclu/' )
 
 		# Load configuration variables
 
-		if os.path.exists('/etc/agile/'+profile+'.conf'): cfg.read('/etc/agile/'+profile+'.conf')
+		if os.path.isfile( os.path.join( config_path, profile+'.conf' ) ):
+			cfg.read( os.path.join( config_path, profile+'.conf' ) )
+
 		else:
-			print "Profile (%s) does not exist.  Create profile with \"agileprofile\" command." % profile
+			print "Profile (%s) does not exist.  Use \"agileprofile create %s\" to create the profile." % (profile,profile)
 			# logger.critical( "configuration /etc/agile/"+profile+".conf does not exist" )
 			sys.exit(1)
-
-		# minor check to look for compliant configuration file
-		if not cfg.has_option("Egress","protocol"):
-			print "Profile (%s) is not valid!  Create profile with \"agileprofile\" command." % profile
-			sys.exit(1)
-
 
 		self.uid = cfg.get("Identity", "username")
 
@@ -72,7 +70,6 @@ class	AgileCLU:
 		self.ingest_hostname = cfg.get("Ingest", "hostname")
 
 		self.mapperurl = self.egress_protocol + "://" + self.egress_hostname + self.egress_basepath
-	
 		self.apiurl = self.ingest_protocol + "://" + self.ingest_hostname + "/jsonrpc"
 		self.posturl = self.ingest_protocol + "://" + self.ingest_hostname + "/post/file"
 		self.postmultiurl = self.ingest_protocol + ":8080//" + self.ingest_hostname + "/multipart"
@@ -80,15 +77,10 @@ class	AgileCLU:
 		self.pbar = None
 		self.pbarfname = None
 
-		upw = e_pw_dehash( 
-			cfg.get("Identity", "password"), 
-			self.uid, 
-			self.egress_protocol, 
-			self.egress_hostname, 
-			self.egress_basepath )
+		upw = e_pw_dehash( cfg.get("Identity", "password"), self.uid, self.egress_protocol, self.egress_hostname, self.egress_basepath )
 
 		if upw is "87654321":
-			print "Password is not valid!  Verify profile was built with \"agileprofile\" command."
+			print "Password corruptions - dehash was empty!  Delete the profile and create a new one."
 			sys.exit(1)
 
 		# initialize the logger for session
