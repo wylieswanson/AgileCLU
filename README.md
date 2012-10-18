@@ -1,6 +1,8 @@
 # AgileCLU #
 
-AgileCLU is a command line tool implementation and Python programming library for Limelight Networks Agile Storage cloud platform.  Release documentation is posted at http://wylieswanson.github.com/AgileCLU/.  The tools and library leverage Agile's JSON-RPC APIs and HTTP ingest and egress capabilities in an easy to use way.  To use these tools, you must have:
+AgileCLU is a command line implementation of Limelight Networks Agile Storage cloud platform.  It is also a Python library to simplify integrating Python applications with cloud object storage.
+
+The tools and library leverage Agile's JSON-RPC APIs and HTTP ingest and egress capabilities in an easy to use way.  To use these tools, you must have:
 
 * An account on Limelight Network's Agile Storage cloud platform. (http://www.limelightnetworks.com)
 

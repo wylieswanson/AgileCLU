@@ -15,7 +15,7 @@ def main(*arg):
 
 	parser = OptionParser( usage= "usage: %prog [options] object path", version="%prog (AgileCLU "+AgileCLU.__version__+")")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="be verbose", default=False)
-        parser.add_option("-l", "--login", dest="username", help="use alternate account configuration")
+        parser.add_option("-l", "--login", dest="username", help="use alternate profile")
 
 	group = OptionGroup(parser, "Handling Options")
 	group.add_option("-r", "--rename", dest="filename", help="rename destination file")
@@ -75,8 +75,7 @@ def main(*arg):
 
 	result = agile.post( os.path.join(localpath,localfile), path, fname, mimetype, None, options.egress, False, callback )
 
-	if result:
-		if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
+	if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
 
 	agile.logout()
 

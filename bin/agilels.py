@@ -16,7 +16,7 @@ def main(*arg):
 
 	parser = OptionParser( usage= "usage: %prog [options] path", version="%prog (AgileCLU "+AgileCLU.__version__+")")
 	parser.add_option("-v", "--verbose", action="store_true", dest="verbose", help="be verbose", default=False)
-        parser.add_option("-l", "--login", dest="username", help="use alternate account configuration")
+        parser.add_option("-l", "--login", dest="username", help="use alternate profile")
 	parser.add_option("-r", "--recurse", action="store_true", help="recurse directories")
 
 	group = OptionGroup(parser, "Output options")
