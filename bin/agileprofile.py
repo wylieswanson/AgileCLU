@@ -61,17 +61,22 @@ def	edit_profile( profile, command ):
 	elif command=='modify':
 		config.read( os.path.join( config_path, profile+'.conf' ) ) 
 
-		username=config.get( "Identity", "username" )
-		password=config.get( "Identity", "password" )
+		try:
+			cfgver=config.get("AgileCLU", "version" )
+			username=config.get( "Identity", "username" )
+			password=config.get( "Identity", "password" )
 
-		egress_protocol=config.get( "Egress", "protocol" )
-		egress_hostname=config.get( "Egress", "hostname" )
-		egress_port=config.get( "Egress", "port" )
-		egress_basepath=config.get( "Egress", "basepath" )
+			egress_protocol=config.get( "Egress", "protocol" )
+			egress_hostname=config.get( "Egress", "hostname" )
+			egress_port=config.get( "Egress", "port" )
+			egress_basepath=config.get( "Egress", "basepath" )
 
-		ingest_protocol=config.get( "Ingest", "protocol" )
-		ingest_hostname=config.get( "Ingest", "hostname" )
-		ingest_port=config.get( "Ingest", "port" )
+			ingest_protocol=config.get( "Ingest", "protocol" )
+			ingest_hostname=config.get( "Ingest", "hostname" )
+			ingest_port=config.get( "Ingest", "port" )
+		except:
+			print "Profile (%s) is incomplete.  %s should be %s.  Exiting." % (profile, cfgver, AgileCLU.AgileCLU.__version__ )
+			sys.exit(1)
 
 	ciphered = 0
 	print command.upper()+ " PROFILE: "+profile

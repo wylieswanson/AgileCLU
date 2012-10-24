@@ -73,7 +73,11 @@ def main(*arg):
 	if options.progress: callback = agile.pbar_callback
 	else: callback = None
 
-	result = agile.post( os.path.join(localpath,localfile), path, fname, mimetype, None, options.egress, False, callback )
+	try:
+		result = agile.post( os.path.join(localpath,localfile), path, fname, mimetype, None, options.egress, False, callback )
+	except (KeyboardInterrupt, SystemExit):
+		print "\nInterupted..."
+		sys.exit(1)
 
 	if options.verbose: print "%s%s" % (agile.mapperurlstr(),urllib.quote(os.path.join(path,fname)))
 
