@@ -8,11 +8,11 @@ readme = open(os.path.join(here,"README.md")).read()
 setup(  
 	name="AgileCLU",
 	version="0.4.2",
-   install_requires=['poster','progressbar','pydes','jsonrpclib'],
+	install_requires=['poster','progressbar','pydes','jsonrpclib'],
 	packages=['AgileCLU'],
 	package_data={'': ['LICENSE','README.md']},
 	include_package_data=True,
-	scripts=['bin/agilels', 'bin/agilefetch', 'bin/agilemkdir', 'bin/agilepost', 'bin/agileprofile', 'bin/agilerm', 'bin/agilermdir',  'bin/agilels.py', 'bin/agilefetch.py', 'bin/agilemkdir.py', 'bin/agilepost.py', 'bin/agileprofile.py', 'bin/agilerm.py', 'bin/agilermdir.py'],
+	scripts=['bin/agilels', 'bin/agilefetch', 'bin/agilemkdir', 'bin/agilepost', 'bin/agileprofile', 'bin/agilerm', 'bin/agilermdir', 'bin/agilels.py', 'bin/agilefetch.py', 'bin/agilemkdir.py', 'bin/agilepost.py', 'bin/agileprofile.py', 'bin/agilerm.py', 'bin/agilermdir.py'],
 
 	description="Agile Command Line Utilities",
 	long_description=readme,
@@ -22,13 +22,13 @@ setup(
 	download_url = "https://github.com/wylieswanson/AgileCLU/raw/master/dist/AgileCLU-0.4.2.tar.gz",
 
 	platforms = ("Any",),
-	keywords = ("agile", "storage", "limelight", "cloud", "object" ),
+	keywords = ("agile", "storage", "limelight", "cloud", "object"),
 
 	classifiers = [	'Development Status :: 4 - Beta',
-							'License :: OSI Approved :: BSD License',
-							'Programming Language :: Python',
-							'Intended Audience :: End Users/Desktop',
-							'Environment :: Console',
-							'Topic :: Utilities',
-							]
+			'License :: OSI Approved :: BSD License',
+			'Programming Language :: Python',
+			'Intended Audience :: End Users/Desktop',
+			'Environment :: Console',
+			'Topic :: Utilities',
+		      ]
 	)
