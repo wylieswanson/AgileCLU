@@ -9,10 +9,11 @@ setup(
 	name="AgileCLU",
 	version="0.4.2",
 	install_requires=['poster','progressbar','pydes','jsonrpclib'],
-	packages=['AgileCLU'],
+	packages=['AgileCLU', 'AgileCLU.tests'],
 	package_data={'': ['LICENSE','README.md']},
 	include_package_data=True,
 	scripts=['bin/agilels', 'bin/agilefetch', 'bin/agilemkdir', 'bin/agilepost', 'bin/agileprofile', 'bin/agilerm', 'bin/agilermdir', 'bin/agilels.py', 'bin/agilefetch.py', 'bin/agilemkdir.py', 'bin/agilepost.py', 'bin/agileprofile.py', 'bin/agilerm.py', 'bin/agilermdir.py'],
+	test_suite='AgileCLU.tests',
 
 	description="Agile Command Line Utilities",
 	long_description=readme,

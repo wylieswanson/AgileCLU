@@ -141,6 +141,14 @@ Next, set the system's PATH variable to include directories that include Python 
 At this point, you can return to the basic installation method (easy_install) at the top of this document.  Note that you will need to place the output of agileprofile in C:\etc\agile\agile.conf, or alternate profiles C:\etc\agile\profileconf (to be used by the -l command line option).
 
 
+# Testing #
+
+AgileCLU test suite can be run with:
+
+	python setup.py test
+
+
+
 # Libraries used by AgileCLU #
 
 This package leverages the following Python libraries:
