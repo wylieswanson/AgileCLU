@@ -1,17 +1,20 @@
 #!/usr/bin/env python
 
-import AgileCLU
 import unittest
+import AgileCLU
 
 class AgileCLUTestCase(unittest.TestCase):
-  def setup(self):
-    self.agileclu = AgileCLU()
   def test_epwbasekey(self):
-    return
+    hash=AgileCLU.epwbasekey('test', 'test', 'test.example.com', '/')
+    self.assertEqual(hash, 'AbiDicIBaEuvafIuegJWVP8j')
+
   def test_e_pw_hash(self):
-    return
+    hash=AgileCLU.e_pw_hash('teststr', 'test', 'test', 'test.example.com', '/')
+    self.assertEqual(hash, 'jyH0M5b9OyM=')
+
   def test_e_pw_dehash(self):
-    return
+    hash=AgileCLU.e_pw_dehash('teststr', 'test', 'test', 'test.example.com', '/')
+    self.assertEqual(hash, '87654321')
 
 if __name__ == "__main__":
   unittest.main()
