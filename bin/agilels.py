@@ -5,6 +5,8 @@ from optparse import OptionParser, OptionGroup
 from operator import itemgetter
 import sys, os.path, string, urllib
 
+MAX_LISTFILE_SIZE=200000
+
 def sizeof_fmt(num):
         for x in ['bytes','KB','MB','GB','TB']:
                 if num < 1024.0: return "%3.1f %s" % (num, x)
@@ -60,7 +62,7 @@ def main(*arg):
 		class DirWalker(object):
 
 			def walk(self,path,meth):
-				dir = agile.listDir( path,  1000, 0, 1 )
+				dir = agile.listDir( path,  10000, 0, 1 )
 				dir['list'] = sorted(dir['list'], key=str)
                 		for item in dir['list']:
 		                        itemurl = os.path.join(path,item['name'])
@@ -69,24 +71,31 @@ def main(*arg):
 		                        self.walk(itemurl,meth)
 
 		def FileWalker(object):
-                	fl = agile.listFile(object, 1000, 0, 1)
-			items = fl['list']
-			items = sorted( items, key=itemgetter('name'))
-			items = sorted( items, key=lambda x: x['name'].lower())
-	                for item in items:
-	                        if options.url: 
-					itemurl = "%s%s" % (agile.mapperurlstr(),  urllib.quote(os.path.join( object, item['name'] )))
-	                        else: 
-					itemurl = os.path.join(object,item['name'])
-	                        if options.bytes: 
-	                                if options.sizes: itemurl += " "+sizeof_fmt(item['stat']['size'])
-	                                else: itemurl += " "+str(item['stat']['size'])+" bytes"
-	                        print itemurl
+			cookie = 0	
+			pagesize = 10000
+			while True:
+                		fl = agile.listFile(object, pagesize, cookie, 1)
+				items = fl['list']
+				items = sorted( items, key=itemgetter('name'))
+				items = sorted( items, key=lambda x: x['name'].lower())
+	                	for item in items:
+	                        	if options.url: 
+						itemurl = "%s%s" % (agile.mapperurlstr(),  urllib.quote(os.path.join( object, item['name'] )))
+	                        	else: 
+						itemurl = os.path.join(object,item['name'])
+	                        	if options.bytes: 
+	                                	if options.sizes: itemurl += " "+sizeof_fmt(item['stat']['size'])
+	                                	else: itemurl += " "+str(item['stat']['size'])+" bytes"
+	                    	    	print itemurl
+				if len(items) < pagesize:
+					break
+				else:
+					cookie +=pagesize
 
 		if options.recurse: 
 			DirWalker().walk(path,FileWalker)
 		else: 
-                        dir = agile.listDir( path,  1000, 0, 1 )
+                        dir = agile.listDir( path,  10000, 0, 1 )
 			dir['list'] = sorted(dir['list'], key=str)
                         for item in dir['list']:
                         	itemurl = os.path.join(path,item['name'])
