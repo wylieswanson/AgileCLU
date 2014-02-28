@@ -7,7 +7,7 @@ readme = open(os.path.join(here,"README.md")).read()
 
 setup(  
 	name="AgileCLU",
-	version="0.4.2.1",
+	version="0.4.2.2",
 	install_requires=['poster','progressbar','pydes','jsonrpclib'],
 	packages=['AgileCLU', 'AgileCLU.tests'],
 	package_data={'': ['LICENSE','README.md']},
