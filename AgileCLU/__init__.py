@@ -45,7 +45,7 @@ def	e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.4.2.2"
+	__version__ = "0.4.2.3"
 
 	def     __init__(self, profile='default'):
 		config_path = os.path.expanduser( '~/.agileclu/' )
@@ -342,11 +342,6 @@ class	AgileCLU:
                 if (not os.path.isfile(sourceObject)): logger.info( "local("+sourceObject+") does not exist") ; return False
                 if (not self.dexists(targetPath)): logger.info( "remote("+targetPath+") does not exist") ; return False
 
-		"""
-                def progress(bar, maxval, download_t, download_d, upload_t, upload_d):
-                        bar.update(min(maxval, upload_d))
-		"""
-
                 sourcePath = os.path.dirname(sourceObject)
                 sourceName = os.path.basename(sourceObject)
                 # self.pbarfname = sourceName
@@ -354,19 +349,9 @@ class	AgileCLU:
                 headers.append(str("X-Agile-Authorization: %s" % (str(self.token))))
                 headers.append(str("X-Content-Type: %s" % (mimetype)))
                 headers.append(str("X-Agile-Basename: %s" % (str(sourceName))))
-                headers.append(str("X-Agile-Directory: %s" % (str(sourcePath))))
+                headers.append(str("X-Agile-Directory: %s" % (str(targetPath))))
 
-		"""
-                widgets = [
-                        progressbar.Percentage(), ' ',
-                        progressbar.Bar(), ' ',
-                        progressbar.ETA(), ' ',
-                        progressbar.FileTransferSpeed(),
-                ]
-		"""
                 total_filesize = os.stat(sourceObject).st_size
-                #bar = progressbar.ProgressBar(widgets=widgets, maxval=total_filesize)
-                #bar.start()
 
                 c = pycurl.Curl()
                 c.setopt(c.URL, self.postrawurl)
