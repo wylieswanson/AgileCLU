@@ -1,6 +1,6 @@
 import jsonrpclib
 import ConfigParser, sys, os.path, logging
-import poster 
+import poster, pycurl
 import pyDes, hashlib, base64
 from urllib2 import Request, urlopen, URLError, HTTPError
 import progressbar
@@ -45,7 +45,7 @@ def	e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.4.2"
+	__version__ = "0.4.2.1"
 
 	def     __init__(self, profile='default'):
 		config_path = os.path.expanduser( '~/.agileclu/' )
@@ -72,6 +72,7 @@ class	AgileCLU:
 		self.mapperurl = self.egress_protocol + "://" + self.egress_hostname + self.egress_basepath
 		self.apiurl = self.ingest_protocol + "://" + self.ingest_hostname + "/jsonrpc"
 		self.posturl = self.ingest_protocol + "://" + self.ingest_hostname + "/post/file"
+		self.postrawurl = self.ingest_protocol + "://" + self.ingest_hostname + "/post/raw"
 		self.postmultiurl = self.ingest_protocol + ":8080//" + self.ingest_hostname + "/multipart"
 
 		self.pbar = None
@@ -335,3 +336,46 @@ class	AgileCLU:
 				print '[!] URL Error: ', e.reason
 				self.pbar = None
 				success = False
+
+        def     postraw(self, sourceObject, targetPath, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None):
+                logger.info( self.uid+" "+self.token+", post "+sourceObject+" "+targetPath+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
+                if (not os.path.isfile(sourceObject)): logger.info( "local("+sourceObject+") does not exist") ; return False
+                if (not self.dexists(targetPath)): logger.info( "remote("+targetPath+") does not exist") ; return False
+
+                def progress(bar, maxval, download_t, download_d, upload_t, upload_d):
+                        bar.update(min(maxval, upload_d))
+
+                sourcePath = os.path.dirname(sourceObject)
+                sourceName = os.path.basename(sourceObject)
+                self.pbarfname = sourceName
+                headers = []
+                headers.append(str("X-Agile-Authorization: %s" % (str(self.token))))
+                headers.append(str("X-Content-Type: %s" % (mimetype)))
+                headers.append(str("X-Agile-Basename: %s" % (str(sourceName))))
+                headers.append(str("X-Agile-Directory: %s" % (str(sourcePath))))
+
+                widgets = [
+                        progressbar.Percentage(), ' ',
+                        progressbar.Bar(), ' ',
+                        progressbar.ETA(), ' ',
+                        progressbar.FileTransferSpeed(),
+                ]
+                total_filesize = os.stat(sourceObject).st_size
+                bar = progressbar.ProgressBar(widgets=widgets, maxval=total_filesize)
+                bar.start()
+
+                c = pycurl.Curl()
+                c.setopt(c.URL, self.postrawurl)
+                c.setopt(c.NOPROGRESS, 0)
+                c.setopt(c.PROGRESSFUNCTION, lambda *args: progress(bar, total_filesize, *args))
+                #c.setopt(c.HEADER, 1)
+                c.setopt(c.HTTPHEADER, headers)
+                c.setopt(c.UPLOAD, 1)
+                c.setopt(c.READFUNCTION, open(sourceObject, 'rb').read)
+                c.setopt(c.INFILESIZE_LARGE, total_filesize)
+                c.setopt(c.CUSTOMREQUEST, "POST")
+                c.setopt(c.VERBOSE, False)
+                c.setopt(c.SSL_VERIFYHOST, False)
+                c.setopt(c.SSL_VERIFYPEER, False)
+                c.perform()
+
