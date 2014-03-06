@@ -45,7 +45,7 @@ def	e_pw_dehash( str, username, proto, hostname, basepath ):
 
 class	AgileCLU:
 	__module__ = "AgileCLU"
-	__version__ = "0.4.2.3"
+	__version__ = "0.4.2.3.1"
 
 	def     __init__(self, profile='default'):
 		config_path = os.path.expanduser( '~/.agileclu/' )
@@ -295,10 +295,12 @@ class	AgileCLU:
 			print e
 			print "!"
 
-	def	post(self, sourceObject, targetPath, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None):
-		logger.info( self.uid+" "+self.token+", post "+sourceObject+" "+targetPath+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
-		if (not os.path.isfile(sourceObject)): logger.info( "local("+sourceObject+") does not exist") ; return False 
-		if (not self.dexists(targetPath)): logger.info( "remote("+targetPath+") does not exist") ; return False
+	def	post(self, sourceObject, targetPath, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None, debug=True):
+		if debug:
+			logger.info( self.uid+" "+self.token+", post "+sourceObject+" "+targetPath+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
+			if (not os.path.isfile(sourceObject)): logger.info( "local("+sourceObject+") does not exist") ; return False 
+                	#dexists is not a thread safe call.  If your calling with multiple threads set debug=False, not only is it safe, it's faster
+			if (not self.dexists(targetPath)): logger.info( "remote("+targetPath+") does not exist") ; return False
 
 		sourcePath = os.path.dirname(sourceObject) 
 		sourceName = os.path.basename(sourceObject)
@@ -337,10 +339,12 @@ class	AgileCLU:
 				self.pbar = None
 				success = False
 
-        def     postraw(self, sourceObject, targetPath, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None):
-                logger.info( self.uid+" "+self.token+", post "+sourceObject+" "+targetPath+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
-                if (not os.path.isfile(sourceObject)): logger.info( "local("+sourceObject+") does not exist") ; return False
-                if (not self.dexists(targetPath)): logger.info( "remote("+targetPath+") does not exist") ; return False
+        def     postraw(self, sourceObject, targetPath, rename=None, mimetype='auto', mtime=None, egress_policy='COMPLETE', mkdir=False, callback=None, debug=True):
+		if debug:
+			logger.info( self.uid+" "+self.token+", post "+sourceObject+" "+targetPath+", rename="+str(rename)+", mimetype="+str(mimetype)+", mtime="+str(mtime)+", egress="+str(egress_policy)+", mkdir="+str(mkdir))
+                	if (not os.path.isfile(sourceObject)): logger.info( "local("+sourceObject+") does not exist") ; return False
+                	#dexists is not a thread safe call.  If your calling with multiple threads set debug=False, not only is it safe, it's faster
+			if (not self.dexists(targetPath)): logger.info( "remote("+targetPath+") does not exist") ; return False
 
                 sourcePath = os.path.dirname(sourceObject)
                 sourceName = os.path.basename(sourceObject)
